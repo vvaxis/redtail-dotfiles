@@ -1,0 +1,62 @@
+# ============================================================================
+# SWAYLOCK-EFFECTS — redtail lock screen v2
+# "RED-TAIL SYSTEM // NAV-COM UNIT 02"
+# Blur + clock + indicador âmbar quente
+# ============================================================================
+
+# ── Geral ─────────────────────────────────────────────────────────────────
+daemonize
+ignore-empty-password
+show-failed-attempts
+indicator-caps-lock
+
+# ── Fundo: screenshot + blur ─────────────────────────────────────────────
+screenshots
+effect-blur=20x3
+effect-vignette=0.3:0.8
+fade-in=0.15
+
+# ── Relógio ───────────────────────────────────────────────────────────────
+clock
+timestr=%H:%M
+datestr=%A, %d de %B
+
+# ── Indicador (anel) ──────────────────────────────────────────────────────
+indicator
+indicator-radius=100
+indicator-thickness=8
+
+# Estados do anel
+inside-color=1a171400
+ring-color=3d352edd
+
+# Digitando
+inside-clear-color=1a171400
+ring-clear-color=d4a243dd
+text-clear-color=e2d5c0ff
+
+# Verificando
+inside-ver-color=1a171400
+ring-ver-color=d4a243dd
+text-ver-color=e2d5c0ff
+
+# Errado
+inside-wrong-color=1a171400
+ring-wrong-color=c25d5ddd
+text-wrong-color=c25d5dff
+
+# Caps lock ativo
+inside-caps-lock-color=1a171400
+ring-caps-lock-color=e0b65bdd
+text-caps-lock-color=e0b65bff
+
+# Separador
+separator-color=00000000
+
+# Highlight das teclas
+key-hl-color=d4a243ff
+bs-hl-color=c46d4dff
+
+# ── Tipografia ────────────────────────────────────────────────────────────
+font=Iosevka Nerd Font
+font-size=14

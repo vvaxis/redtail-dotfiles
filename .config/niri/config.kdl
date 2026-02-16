@@ -1,20 +1,16 @@
 // ============================================================================
 // NIRI CONFIGURATION — redtail
-// Alinhado com o setup Hyprland do swordfish
+// Posto avançado: leve, quente, focado em leitura/escrita
 // Ref: https://yalter.github.io/niri/Configuration:-Introduction
 // ============================================================================
 
 
 // ─── INPUT ──────────────────────────────────────────────────────────────────
-// Teclado, touchpad e comportamento do mouse
-
 input {
     keyboard {
         xkb {
-            // Layout brasileiro (br), igual ao Hyprland
             layout "br"
         }
-        // Key repeat: mesmos valores do Hyprland (rate 40, delay 200)
         repeat-delay 200
         repeat-rate 40
         numlock
@@ -26,58 +22,44 @@ input {
         dwtp
         drag false
         drag-lock
-        // natural-scroll desligado, igual ao Hyprland
-        // (remova a linha abaixo se quiser scroll invertido)
         natural-scroll
         accel-speed 0.2
         accel-profile "flat"
         scroll-method "two-finger"
     }
 
-    mouse {
-        // Sem customização por enquanto — ajuste se precisar
-    }
+    mouse {}
 
-    // Foco segue o mouse, como follow_mouse=1 no Hyprland
     focus-follows-mouse max-scroll-amount="0%"
 }
 
 
 // ─── LAYOUT ─────────────────────────────────────────────────────────────────
-// Gaps, bordas, sombras e posicionamento de janelas
-
 layout {
-    // Gaps equivalentes ao Hyprland (gaps_in=5, gaps_out=14)
-    // Niri usa um valor único; 14 fica próximo do gaps_out
     gaps 15
-
     center-focused-column "on-overflow"
-	always-center-single-column
-	
-    // Larguras pré-definidas ao alternar com Mod+R
+    always-center-single-column
+    background-color "transparent"
+
     preset-column-widths {
         proportion 0.33333
         proportion 0.5
         proportion 0.66667
     }
 
-    // Janelas novas abrem em 70% da tela
-    default-column-width { proportion 0.7; }
+    default-column-width { proportion 0.5; }
 
-    // Focus ring — equivale ao border ativo do Hyprland
-    // width=2 alinhado com border_size=2
+    // Focus ring — âmbar quente (acento primário redtail)
     focus-ring {
         width 2
-        active-color "#7fc8ff"
-        inactive-color "#505050"
+        active-color "#d4a243"
+        inactive-color "#3d352e"
     }
 
-    // Borda adicional desativada (focus-ring já cumpre o papel)
     border {
         off
     }
 
-    // Sombra habilitada, equivalente ao shadow do Hyprland
     shadow {
         on
         draw-behind-window false
@@ -94,23 +76,23 @@ layout {
         length total-proportion=0.3
         position "top"
         place-within-column
-        active-color "#7fc8ff"
-        inactive-color "#505050"
+        active-color "#d4a243"
+        inactive-color "#3d352e"
     }
 
     struts {
         left 15;
         right 15;
     }
-
 }
 
+// Foot tabs: terminais abrem em tab por padrão
 window-rule {
-    match app-id="^kitty$"
+    match app-id="^foot$"
     default-column-display "tabbed"
 }
 
-// ─── GESTURES ───
+// ─── GESTURES ───────────────────────────────────────────────────────────────
 gestures {
     hot-corners {
         top-left
@@ -118,58 +100,59 @@ gestures {
 }
 
 overview {
-    zoom 0.5
+    zoom 0.6
     workspace-shadow {
-        softness 20
-        spread 10
+        softness 30
+        spread 30
         offset x=0 y=5
         color "#00000050"
     }
+    backdrop-color "#1a1714"
+
 }
 
 
 // ─── VISUAL ─────────────────────────────────────────────────────────────────
-// Aparência global, CSD e screenshots
-
-// Remove decorações client-side (bordas e rounded corners do app)
-// Equivalente ao comportamento limpo do Hyprland com rounding=2
 prefer-no-csd
 
-// Cantos arredondados globais (rounding=2 no Hyprland)
 window-rule {
     geometry-corner-radius 8
     clip-to-geometry true
 }
 
-// Screenshots vão para ~/Pictures/Screenshots (mesmo padrão do Hyprland)
 screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
-// Animações ativas (ajuste slowdown se quiser mais lento/rápido)
-animations {
-    // slowdown 1.0
-}
+animations {}
 
-// Hotkey overlay desativado no startup (menos poluição visual)
 hotkey-overlay {
     skip-at-startup
 }
 
-//tema dark
+// Tema dark
+environment {
+    XCURSOR_THEME "phinger-cursors-dark"
+    XCURSOR_SIZE "24"
+}
+
 spawn-at-startup "gsettings" "set" "org.gnome.desktop.interface" "color-scheme" "prefer-dark"
 
 
 // ─── AUTOSTART ──────────────────────────────────────────────────────────────
-// Programas iniciados junto com a sessão (espelho do Hyprland exec-once)
-
 spawn-at-startup "waybar"
-spawn-at-startup "swaync"
-spawn-at-startup "nm-applet"
+spawn-at-startup "dunst"
+// nm-applet removido: rede gerenciada pelo módulo waybar + networkmanager-dmenu
+spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/vvaxis/Imagens/wallpapers/redtail.jpg"
 // spawn-at-startup "blueberry-tray"
-// spawn-at-startup "swayidle"  // Adicione se configurar idle/lock
+spawn-at-startup "swayidle" "-w" "timeout" "300" "swaylock" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
 
 
 // ─── WINDOW RULES ───────────────────────────────────────────────────────────
-// Regras específicas por aplicação
+
+// Backdrop no overview (requer niri ≥ 25.05)
+layer-rule {
+    match namespace="^wallpaper$"
+    place-within-backdrop true
+}
 
 // WezTerm: fix de bug no tamanho inicial
 window-rule {
@@ -177,53 +160,57 @@ window-rule {
     default-column-width {}
 }
 
-// Firefox PiP como flutuante
+// Firefox/LibreWolf PiP como flutuante
 window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id=r#"brave$"# title="^Picture-in-Picture$"
     open-floating true
 }
 
-// LibreWolf PiP como flutuante
 window-rule {
-    match app-id=r#"librewolf$"# title="^Picture-in-Picture$"
+    match app-id=r#"brave$"# title="^Picture-in-Picture$"
     open-floating true
 }
 
-// Opacidade de janelas inativas (inactive_opacity=0.6 no Hyprland)
+// Brave PiP
+window-rule {
+    match app-id=r#"brave"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+// Opacidade de janelas inativas
 window-rule {
     match is-active=false
-    opacity 0.6
+    opacity 0.8
 }
 
 
 // ─── KEYBINDINGS ────────────────────────────────────────────────────────────
-// Alinhados com keybinds.conf do Hyprland (swordfish)
-// Mod = Super (em TTY) ou Alt (em janela winit)
-
 binds {
     // ── Programas ───────────────────────────────────────────────────────
-    Mod+Z       { spawn "kitty"; }                        // Terminal
-    Mod+TAB     { spawn "fuzzel"; }                       // App launcher (rofi no Hyprland)
-    Mod+A       { spawn "librewolf"; }                    // Browser
-    Mod+E       { spawn "thunar"; }                       // File manager
-    Mod+G       { spawn "kitty" "-e" "btop"; }            // System monitor
-    Mod+N       { spawn-sh "swaync-client -t"; }          // Painel de notificações
-    Mod+Escape  { spawn "swaylock"; }                     // Lock screen
-    Mod+B       { spawn "blueberry"; }                    // Bluetooth
-    Mod+Shift+W { spawn-sh "pkill waybar; waybar &"; }    // Restart waybar
+    Mod+Z       { spawn "foot"; }                              // Terminal
+    Mod+TAB     { spawn "fuzzel"; }                            // Launcher
+    Mod+A       { spawn "brave"; }                         // Browser
+    Mod+E       { spawn "nautilus"; }                          // File manager
+    Mod+G       { spawn "foot" "-e" "btop"; }                  // System monitor
+    Mod+Y       { spawn "foot" "-e" "yazi"; }                  // File manager (terminal)
+    Mod+N       { spawn-sh "dunstctl history-pop"; }           // Recall última notificação
+    Mod+Shift+N { spawn-sh "dunstctl close-all"; }             // Fechar todas notificações
+    Mod+Escape  { spawn "swaylock"; }                          // Lock
+    Mod+B       { spawn "blueberry"; }                         // Bluetooth
+    Mod+Shift+W { spawn-sh "pkill waybar; waybar &"; }         // Restart waybar
 
     // ── Controle de janelas ─────────────────────────────────────────────
-    Mod+Q          { close-window; }                      // Fechar janela (killactive)
-    Mod+V          { toggle-window-floating; }            // Toggle flutuante
-    Mod+F          { maximize-column; }                   // Maximizar (≈ fullscreen)
-    Mod+Shift+F    { fullscreen-window; }                 // Fullscreen real
-    Mod+R          { switch-preset-column-width; }        // Ciclar larguras
-    Mod+Shift+R    { switch-preset-window-height; }       // Ciclar alturas
-    Mod+Ctrl+R     { reset-window-height; }               // Resetar altura
-    Mod+C          { center-column; }                     // Centralizar coluna
-    Mod+Ctrl+F     { expand-column-to-available-width; }  // Expandir ao espaço livre
+    Mod+Q          { close-window; }
+    Mod+V          { toggle-window-floating; }
+    Mod+F          { maximize-column; }
+    Mod+Shift+F    { fullscreen-window; }
+    Mod+R          { switch-preset-column-width; }
+    Mod+Shift+R    { switch-preset-window-height; }
+    Mod+Ctrl+R     { reset-window-height; }
+    Mod+C          { center-column; }
+    Mod+Ctrl+F     { expand-column-to-available-width; }
 
-    // ── Navegação entre janelas (arrows + vim keys) ─────────────────────
+    // ── Navegação (arrows + vim) ────────────────────────────────────────
     Mod+Left   { focus-column-left; }
     Mod+Down   { focus-window-down; }
     Mod+Up     { focus-window-up; }
@@ -252,9 +239,9 @@ binds {
     Mod+6 { focus-workspace 6; }
     Mod+7 { focus-workspace 7; }
     Mod+8 { focus-workspace 8; }
-    Mod+9 { focus-workspace 9; }    
+    Mod+9 { focus-workspace 9; }
 
-    // ── Workspaces (mover janela) — Mod+Shift igual ao Hyprland ─────────
+    // ── Workspaces (mover) ──────────────────────────────────────────────
     Mod+Shift+1 { move-column-to-workspace 1; }
     Mod+Shift+2 { move-column-to-workspace 2; }
     Mod+Shift+3 { move-column-to-workspace 3; }
@@ -265,7 +252,7 @@ binds {
     Mod+Shift+8 { move-column-to-workspace 8; }
     Mod+Shift+9 { move-column-to-workspace 9; }
 
-    // ── Workspace scroll (sequencial) ───────────────────────────────────
+    // ── Workspace scroll ────────────────────────────────────────────────
     Mod+Page_Down  { focus-workspace-down; }
     Mod+Page_Up    { focus-workspace-up; }
     Mod+U          { focus-workspace-down; }
@@ -308,7 +295,7 @@ binds {
     Mod+Ctrl+Home { move-column-to-first; }
     Mod+Ctrl+End  { move-column-to-last; }
 
-    // ── Floating/Tiling toggle ──────────────────────────────────────────
+    // ── Floating ────────────────────────────────────────────────────────
     Mod+Shift+V { switch-focus-between-floating-and-tiling; }
 
     // ── Scroll (mouse wheel) ────────────────────────────────────────────
@@ -319,13 +306,12 @@ binds {
     Mod+WheelScrollRight      { focus-column-right; }
     Mod+WheelScrollLeft       { focus-column-left; }
 
-    // ── Volume e mídia (PipeWire/WirePlumber) ───────────────────────────
+    // ── Volume e mídia ──────────────────────────────────────────────────
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+ -l 1.0"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-"; }
     XF86AudioMute        allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"; }
     XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
 
-    // ── Controles de mídia (playerctl) ──────────────────────────────────
     XF86AudioPlay allow-when-locked=true { spawn-sh "playerctl play-pause"; }
     XF86AudioStop allow-when-locked=true { spawn-sh "playerctl stop"; }
     XF86AudioPrev allow-when-locked=true { spawn-sh "playerctl previous"; }

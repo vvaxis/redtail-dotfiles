@@ -1,0 +1,280 @@
+/* ============================================================================
+   WAYBAR — Redtail Café v2
+   Paleta quente, Maple Mono NF, power menu + system stats
+   ============================================================================ */
+
+/* ── Paleta Redtail ───────────────────────────────────────────────────────── */
+@define-color base       #1a1714;
+@define-color surface    #2a2420;
+@define-color overlay    #3d352e;
+@define-color text       #e2d5c0;
+@define-color subtext    #b0a48e;
+@define-color amber      #d4a243;
+@define-color terracotta #c46d4d;
+@define-color green      #8aab72;
+@define-color blue       #7a9ec2;
+@define-color lavender   #b07ab8;
+@define-color teal       #6fa3a0;
+@define-color red        #c25d5d;
+@define-color yellow     #e0b65b;
+
+/* ── Base ─────────────────────────────────────────────────────────────────── */
+* {
+    font-family: "Iosevka Nerd Font", "Iosevka Nerd Font", monospace;
+    font-size: 13px;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+/* Barra principal: transparente, flutua sobre o wallpaper */
+window#waybar {
+    background: transparent;
+    color: @text;
+}
+
+/* ── Grupos de módulos: pílulas com vidro quente ──────────────────────────── */
+.modules-left,
+.modules-center,
+.modules-right {
+    background: alpha(@base, 0.82);
+    margin: 6px 8px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    border: 1px solid alpha(@amber, 0.20);
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.30),
+        0 0 12px alpha(@amber, 0.06);
+}
+
+.modules-left {
+    margin-left: 12px;
+    padding: 2px 6px;
+}
+
+.modules-center {
+    padding: 2px 12px;
+}
+
+.modules-right {
+    margin-right: 12px;
+    padding: 2px 6px;
+}
+
+/* ── Power button ─────────────────────────────────────────────────────────── */
+#custom-power {
+    color: @text;
+    font-size: 15px;
+    font-weight: 800;
+    border-radius: 8px;
+    margin: 5px 3px;
+    padding: 4px 10px;
+}
+
+#custom-power:hover {
+    color: @amber;
+}
+
+/* ── Workspaces ───────────────────────────────────────────────────────────── */
+#workspaces {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+
+#workspaces button {
+    all: initial;
+    min-width: 0;
+    padding: 5px 12px;
+    margin: 5px 2px;
+    border-radius: 8px;
+    background: transparent;
+    color: @subtext;
+    font-family: "Iosevka Nerd Font", "Iosevka Nerd Font", monospace;
+    font-weight: 600;
+    font-size: 12px;
+    border: none;
+    transition: all 0.15s ease;
+}
+
+#workspaces button.active {
+    color: @base;
+    background: linear-gradient(135deg, @amber 0%, alpha(@yellow, 0.90) 100%);
+    box-shadow: 0 2px 8px alpha(@amber, 0.35);
+    border: 1px solid alpha(@amber, 0.40);
+}
+
+#workspaces button:hover {
+    background: alpha(@surface, 0.90);
+    color: @text;
+    box-shadow: 0 1px 4px alpha(@amber, 0.15);
+}
+
+#workspaces button.urgent {
+    background: linear-gradient(135deg, alpha(@red, 0.80) 0%, alpha(@terracotta, 0.90) 100%);
+    color: @text;
+    box-shadow: 0 2px 8px alpha(@red, 0.40);
+}
+
+/* ── Window title ─────────────────────────────────────────────────────────── */
+#window {
+    font-weight: 700;
+    color: @text;
+    padding: 0 8px;
+}
+
+/* ── Módulos pill: estilo unificado ───────────────────────────────────────── */
+#battery,
+#network,
+#bluetooth,
+#pulseaudio,
+#backlight,
+#clock,
+#cpu,
+#memory,
+#tray,
+#custom-media {
+    border-radius: 8px;
+    margin: 5px 2px;
+    padding: 4px 10px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Clock: acento principal âmbar ────────────────────────────────────────── */
+#clock {
+    background: linear-gradient(135deg, alpha(@amber, 0.80) 0%, alpha(@yellow, 0.85) 100%);
+    color: @base;
+    font-weight: 700;
+}
+
+/* ── CPU ──────────────────────────────────────────────────────────────────── */
+#cpu {
+    background: linear-gradient(135deg, alpha(@blue, 0.70) 0%, alpha(@blue, 0.80) 100%);
+    color: @base;
+}
+
+/* ── Memória ──────────────────────────────────────────────────────────────── */
+#memory {
+    background: linear-gradient(135deg, alpha(@yellow, 0.70) 0%, alpha(@amber, 0.80) 100%);
+    color: @base;
+}
+
+/* ── Bateria ──────────────────────────────────────────────────────────────── */
+#battery {
+    background: linear-gradient(135deg, alpha(@green, 0.75) 0%, alpha(@green, 0.85) 100%);
+    color: @base;
+}
+
+#battery.charging {
+    background: linear-gradient(135deg, alpha(@amber, 0.80) 0%, alpha(@yellow, 0.85) 100%);
+    color: @base;
+}
+
+#battery.warning:not(.charging) {
+    background: linear-gradient(135deg, alpha(@yellow, 0.80) 0%, alpha(@amber, 0.90) 100%);
+    color: @base;
+}
+
+#battery.critical:not(.charging) {
+    background: linear-gradient(135deg, alpha(@red, 0.85) 0%, alpha(@terracotta, 0.90) 100%);
+    color: @text;
+    box-shadow: 0 2px 8px alpha(@red, 0.35);
+}
+
+/* ── Rede ─────────────────────────────────────────────────────────────────── */
+#network {
+    background: linear-gradient(135deg, alpha(@teal, 0.75) 0%, alpha(@teal, 0.85) 100%);
+    color: @base;
+}
+
+#network.disconnected {
+    background: linear-gradient(135deg, alpha(@red, 0.80) 0%, alpha(@terracotta, 0.90) 100%);
+    color: @text;
+}
+
+#network.disabled {
+    background: alpha(@overlay, 0.60);
+    color: @subtext;
+}
+
+/* ── Bluetooth ────────────────────────────────────────────────────────────── */
+#bluetooth {
+    background: alpha(@surface, 0.70);
+    color: @subtext;
+    padding: 4px 6px;
+}
+
+#bluetooth.connected {
+    background: linear-gradient(135deg, alpha(@blue, 0.70) 0%, alpha(@blue, 0.80) 100%);
+    color: @base;
+}
+
+/* ── PulseAudio ───────────────────────────────────────────────────────────── */
+#pulseaudio {
+    background: linear-gradient(135deg, alpha(@lavender, 0.70) 0%, alpha(@lavender, 0.80) 100%);
+    color: @base;
+}
+
+#pulseaudio.muted {
+    background: alpha(@overlay, 0.60);
+    color: @subtext;
+}
+
+/* ── Backlight ────────────────────────────────────────────────────────────── */
+#backlight {
+    background: linear-gradient(135deg, alpha(@yellow, 0.70) 0%, alpha(@amber, 0.80) 100%);
+    color: @base;
+}
+
+/* ── Media ─────────────────────────────────────────────────────────────────── */
+#custom-media {
+    background: linear-gradient(135deg, alpha(@terracotta, 0.70) 0%, alpha(@amber, 0.75) 100%);
+    color: @base;
+    font-weight: 500;
+}
+
+#custom-media.Paused {
+    background: alpha(@surface, 0.50);
+    color: @subtext;
+}
+
+/* ── Tray ──────────────────────────────────────────────────────────────────── */
+#tray {
+    background: transparent;
+    padding: 2px 6px;
+}
+
+/* ── Hover unificado ──────────────────────────────────────────────────────── */
+#battery:hover,
+#network:hover,
+#bluetooth:hover,
+#pulseaudio:hover,
+#backlight:hover,
+#clock:hover,
+#cpu:hover,
+#memory:hover,
+#custom-media:hover,
+#custom-power:hover {
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.20),
+        0 0 12px alpha(@amber, 0.12);
+    border-color: alpha(@amber, 0.30);
+}
+
+/* ── Tooltips ─────────────────────────────────────────────────────────────── */
+tooltip {
+    border-radius: 8px;
+    padding: 10px;
+    background-color: alpha(@base, 0.95);
+    border: 1px solid alpha(@amber, 0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.40);
+}
+
+tooltip label {
+    padding: 2px;
+    background-color: transparent;
+    color: @text;
+}
