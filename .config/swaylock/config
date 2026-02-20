@@ -27,35 +27,35 @@ indicator-radius=160
 indicator-thickness=10
 
 # Estados do anel
-inside-color=2a1f1400
-ring-color=4d3b28dd
+inside-color=150a0400
+ring-color=745234dd
 
 # Digitando
-inside-clear-color=2a1f1400
-ring-clear-color=d4a243dd
-text-clear-color=e2d5c0ff
+inside-clear-color=150a0400
+ring-clear-color=d6a241dd
+text-clear-color=e4d7c2ff
 
 # Verificando
-inside-ver-color=2a1f1400
-ring-ver-color=d4a243dd
-text-ver-color=e2d5c0ff
+inside-ver-color=150a0400
+ring-ver-color=d6a241dd
+text-ver-color=e4d7c2ff
 
 # Errado
-inside-wrong-color=2a1f1400
-ring-wrong-color=c25d5ddd
-text-wrong-color=c25d5dff
+inside-wrong-color=150a0400
+ring-wrong-color=ca4949dd
+text-wrong-color=ca4949ff
 
 # Caps lock ativo
-inside-caps-lock-color=2a1f1400
-ring-caps-lock-color=e0b65bdd
-text-caps-lock-color=e0b65bff
+inside-caps-lock-color=150a0400
+ring-caps-lock-color=e1b65add
+text-caps-lock-color=e1b65aff
 
 # Separador
 separator-color=00000000
 
 # Highlight das teclas
-key-hl-color=d4a243ff
-bs-hl-color=c46d4dff
+key-hl-color=d6a241ff
+bs-hl-color=cb5e3dff
 
 # ── Tipografia ────────────────────────────────────────────────────────────
 font=Iosevka Nerd Font

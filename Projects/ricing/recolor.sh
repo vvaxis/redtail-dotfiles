@@ -15,7 +15,6 @@ FILES=(
     "$HOME/.config/foot/foot.ini"
     "$HOME/.config/dunst/dunstrc"
     "$HOME/.config/fuzzel/fuzzel.ini"
-    "$HOME/.config/waybar/style.css"
     "$HOME/.config/niri/config.kdl"
     "$HOME/.config/gtk-3.0/gtk.css"
     "$HOME/.config/gtk-4.0/gtk.css"
@@ -25,6 +24,7 @@ FILES=(
     "$HOME/.config/micro/colorschemes/redtail.micro"
     "$HOME/.config/btop/themes/redtail.theme"
     "$HOME/.zshrc.local"
+    "$HOME/.config/ignis/style.css"
 )
 
 # Read palettes into associative arrays

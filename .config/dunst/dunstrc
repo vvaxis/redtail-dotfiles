@@ -24,7 +24,7 @@
     horizontal_padding = 14
     text_icon_padding = 12
     frame_width = 2
-    frame_color = "#4d3b28"
+    frame_color = "#745234"
     gap_size = 4
     separator_color = frame
     corner_radius = 10
@@ -68,34 +68,34 @@
 
 # ── Urgência: baixa (informação, confirmações) ───────────────────────────
 [urgency_low]
-    background = "#2a1f14"
-    foreground = "#b0a48e"
-    frame_color = "#4d3b28"
-    highlight = "#8aab72"
+    background = "#150a04"
+    foreground = "#b6a285"
+    frame_color = "#745234"
+    highlight = "#79ba58"
     timeout = 5
 
 # ── Urgência: normal (notificações padrão) ───────────────────────────────
 [urgency_normal]
-    background = "#2a1f14"
-    foreground = "#e2d5c0"
-    frame_color = "#d4a243"
-    highlight = "#d4a243"
+    background = "#150a04"
+    foreground = "#e4d7c2"
+    frame_color = "#d6a241"
+    highlight = "#d6a241"
     timeout = 8
 
 # ── Urgência: crítica (alertas importantes) ──────────────────────────────
 [urgency_critical]
-    background = "#3b2d1e"
-    foreground = "#e2d5c0"
-    frame_color = "#c25d5d"
-    highlight = "#c25d5d"
+    background = "#392214"
+    foreground = "#e4d7c2"
+    frame_color = "#ca4949"
+    highlight = "#ca4949"
     timeout = 0
 
 # ── Regras por app ───────────────────────────────────────────────────────
 [spotify]
     appname = Spotify
-    frame_color = "#8aab72"
+    frame_color = "#79ba58"
     timeout = 4
 
 [brave]
     appname = Brave
-    frame_color = "#c46d4d"
+    frame_color = "#cb5e3d"

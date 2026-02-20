@@ -22,7 +22,7 @@ source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # ── Autosuggestions ──────────────────────────────────────────────────────────
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6b5f52"
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#6c5745"
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
 # ── Starship ──────────────────────────────────────────────────────────────

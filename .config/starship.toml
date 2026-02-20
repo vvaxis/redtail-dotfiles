@@ -13,54 +13,54 @@ right_format = """$python$rust$nodejs$cmd_duration"""
 # ── User@Host ───────────────────────────────────────────────────────────────
 [username]
 show_always = true
-style_user = "#d4a243"
+style_user = "#d6a241"
 format = "[$user]($style)"
 
 [hostname]
 ssh_only = false
-style = "bold #c46d4d"
+style = "bold #cb5e3d"
 format = "[@$hostname]($style):"
 
 # ── Directory ───────────────────────────────────────────────────────────────
 [directory]
-style = "bold #e0b65b"
+style = "bold #e1b65a"
 truncation_length = 3
 truncate_to_repo = false
 
 # ── Git branch ──────────────────────────────────────────────────────────────
 [git_branch]
 symbol = ""
-style = "#8aab72"
+style = "#79ba58"
 format = " [$symbol$branch]($style)"
 
 # ── Git status ──────────────────────────────────────────────────────────────
 [git_status]
-style = "#c25d5d"
+style = "#ca4949"
 format = '[$all_status$ahead_behind]($style)'
 
 # ── Languages (only appear inside relevant projects) ────────────────────────
 [python]
 symbol = " "
-style = "#e0b65b"
+style = "#e1b65a"
 format = "[$symbol$version]($style) "
 
 [rust]
 symbol = " "
-style = "#c46d4d"
+style = "#cb5e3d"
 format = "[$symbol$version]($style) "
 
 [nodejs]
 symbol = " "
-style = "#8aab72"
+style = "#79ba58"
 format = "[$symbol$version]($style) "
 
 # ── Command duration (right side, only if > 3s) ─────────────────────────────
 [cmd_duration]
 min_time = 3000
-style = "#6b5f52"
+style = "#6c5745"
 format = "[$duration]($style)"
 
 # ── Prompt character (second line) ──────────────────────────────────────────
 [character]
-success_symbol = "[▸](bold #d4a243)"
-error_symbol = "[▸](bold #c25d5d)"
+success_symbol = "[▸](bold #d6a241)"
+error_symbol = "[▸](bold #ca4949)"

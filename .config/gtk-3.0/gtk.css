@@ -1,21 +1,72 @@
+@define-color accent_bg_color #d6a241;
+@define-color accent_color #d6a241;
+@define-color theme_bg_color #150a04;
+@define-color theme_fg_color #e4d7c2;
+@define-color theme_base_color #150a04;
+@define-color theme_text_color #e4d7c2;
+@define-color theme_selected_bg_color #d6a241;
+@define-color theme_selected_fg_color #150a04;
+@define-color theme_unfocused_bg_color #150a04;
+@define-color theme_unfocused_fg_color #e4d7c2;
+@define-color theme_unfocused_base_color #150a04;
+@define-color theme_unfocused_text_color #e4d7c2;
+@define-color theme_unfocused_selected_bg_color #d6a241;
+@define-color insensitive_bg_color #392214;
+@define-color insensitive_fg_color #6c5745;
+@define-color borders #745234;
+@define-color unfocused_borders #745234;
+@define-color headerbar_bg_color #392214;
+@define-color headerbar_fg_color #e4d7c2;
+@define-color headerbar_backdrop_color #392214;
+@define-color sidebar_bg_color #392214;
+@define-color sidebar_fg_color #e4d7c2;
+@define-color card_bg_color #392214;
+@define-color card_fg_color #e4d7c2;
+@define-color dialog_bg_color #392214;
+@define-color dialog_fg_color #e4d7c2;
+@define-color popover_bg_color #392214;
+@define-color popover_fg_color #e4d7c2;
+@define-color view_bg_color #150a04;
+@define-color view_fg_color #e4d7c2;
+@define-color warning_bg_color #e1b65a;
+@define-color warning_fg_color #150a04;
+@define-color error_bg_color #ca4949;
+@define-color error_fg_color #e4d7c2;
+@define-color success_bg_color #79ba58;
+@define-color success_fg_color #150a04;
 
-@define-color accent_bg_color #d4a243;
+/* ─── Direct widget overrides ────────────────────────────────────────── */
+window, .background {
+    background-color: #150a04;
+    color: #e4d7c2;
+}
 
-@define-color accent_color #d4a243;
+treeview, treeview.view, list, listbox, .view {
+    background-color: #150a04;
+    color: #e4d7c2;
+}
 
-@define-color theme_bg_color #2a1f14;
+treeview:selected, list row:selected, .view:selected {
+    background-color: #d6a241;
+    color: #150a04;
+}
 
-@define-color theme_fg_color #e2d5c0;
+toolbar, .toolbar {
+    background-color: #392214;
+    color: #e4d7c2;
+}
 
-@define-color theme_base_color #2a1f14;
+menubar, .menubar {
+    background-color: #392214;
+    color: #e4d7c2;
+}
 
-@define-color theme_text_color #e2d5c0;
+menu, .menu {
+    background-color: #392214;
+    color: #e4d7c2;
+}
 
-@define-color theme_selected_bg_color #d4a243;
-
-@define-color theme_selected_fg_color #2a1f14;
-
-@define-color headerbar_bg_color #3b2d1e;
-
-@define-color headerbar_fg_color #e2d5c0;
-
+statusbar {
+    background-color: #150a04;
+    color: #b6a285;
+}

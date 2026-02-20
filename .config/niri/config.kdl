@@ -52,8 +52,8 @@ layout {
     // Focus ring — âmbar quente (acento primário redtail)
     focus-ring {
         width 3
-        active-color "#d4a243"
-        inactive-color "#4d3b28"
+        active-color "#d6a241"
+        inactive-color "#745234"
     }
 
     border {
@@ -76,8 +76,8 @@ layout {
         length total-proportion=0.3
         position "top"
         place-within-column
-        active-color "#d4a243"
-        inactive-color "#4d3b28"
+        active-color "#d6a241"
+        inactive-color "#745234"
     }
 
     struts {
@@ -107,7 +107,7 @@ overview {
         offset x=0 y=5
         color "#00000050"
     }
-    backdrop-color "#2a1f14"
+    backdrop-color "#150a04"
 
 }
 
@@ -138,13 +138,14 @@ spawn-at-startup "gsettings" "set" "org.gnome.desktop.interface" "color-scheme" 
 
 
 // ─── AUTOSTART ──────────────────────────────────────────────────────────────
-spawn-at-startup "waybar"
+spawn-at-startup "ignis" "init"
 spawn-at-startup "dunst"
-// nm-applet removido: rede gerenciada pelo módulo waybar + networkmanager-dmenu
+// nm-applet removido: rede gerenciada pelo módulo ignis sidebar + networkmanager-dmenu
 spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/vvaxis/Imagens/wallpapers/redtail.jpg"
 // spawn-at-startup "blueberry-tray"
 spawn-at-startup "swayidle" "-w" "timeout" "300" "swaylock" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
-spawn-at-startup "eww" "daemon"
+// spawn-at-startup "eww" "daemon"  // replaced by ignis dashboard
+spawn-at-startup "ignis" "init"
 
 
 // ─── WINDOW RULES ───────────────────────────────────────────────────────────
@@ -155,14 +156,24 @@ layer-rule {
     place-within-backdrop true
 }
 
-// EWW Dashboard — ocultar em screencast
+// Ignis Sidebar
 layer-rule {
-    match namespace="^eww-dashboard-left$"
+    match namespace="^ignis-sidebar$"
+    opacity 0.99
+    shadow {
+        on
+        softness 20
+        spread 3
+        offset x=0 y=3
+        color "#00001a"
+    }
+    geometry-corner-radius 0
     block-out-from "screencast"
 }
 
+// Ignis Dashboard
 layer-rule {
-    match namespace="^eww-dashboard-right$"
+    match namespace="^ignis-dashboard$"
     block-out-from "screencast"
 }
 
@@ -209,8 +220,8 @@ binds {
     Mod+Shift+N { spawn-sh "dunstctl close-all"; }             // Fechar todas notificações
     Mod+Escape  { spawn "swaylock"; }                          // Lock
     Mod+B       { spawn "blueman-manager"; }                   // Bluetooth
-    Mod+Shift+W { spawn-sh "pkill waybar; waybar &"; }         // Restart waybar
-    Mod+D       { spawn "sh" "-c" "~/.config/eww/scripts/toggle-dashboard.sh"; } // Dashboard
+    Mod+Shift+W { spawn-sh "killall ignis; ignis init &"; }    // Restart ignis
+    Mod+D       { spawn "ignis" "toggle-window" "ignis-dashboard"; } // Dashboard
 
     // ── Controle de janelas ─────────────────────────────────────────────
     Mod+Q          { close-window; }

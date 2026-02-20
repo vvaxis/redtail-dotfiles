@@ -1,0 +1,546 @@
+/* ─── Redtail v4 Palette ───────────────────────────────────────────────── */
+/* base:       #150a04  surface:    #392214  overlay:    #745234           */
+/* text:       #e4d7c2  subtext:    #b6a285  muted:      #6c5745           */
+/* amber:      #d6a241  yellow:     #e1b65a  terracotta: #cb5e3d           */
+/* green:      #79ba58  red:        #ca4949  blue:       #639cce           */
+/* lavender:   #b166c0  teal:       #4fafac                                */
+
+/* ─── Sidebar Window ──────────────────────────────────────────────────── */
+.sidebar {
+    min-width: 44px;
+    background-color: #392214;
+    color: #e4d7c2;
+    font-family: "Iosevka Nerd Font";
+    padding: 6px 0;
+}
+
+/* ─── Sections ────────────────────────────────────────────────────────── */
+.section {
+    padding: 4px 0;
+}
+
+.section-sep {
+    margin: 4px 8px;
+    min-height: 1px;
+    background-color: alpha(#745234, 0.6);
+}
+
+/* ─── Power Button ────────────────────────────────────────────────────── */
+.power-button {
+    min-width: 30px;
+    min-height: 30px;
+    border-radius: 6px;
+    margin: 2px 5px;
+    background-color: transparent;
+    transition: background-color 200ms ease-in-out;
+}
+
+.power-button:hover {
+    background-color: alpha(#ca4949, 0.2);
+}
+
+.power-icon {
+    color: #b6a285;
+    transition: color 200ms ease-in-out;
+}
+
+.power-button:hover .power-icon {
+    color: #ca4949;
+}
+
+/* ─── Workspaces ──────────────────────────────────────────────────────── */
+.workspaces {
+    padding: 4px 0;
+}
+
+.ws-dot {
+    min-width: 6px;
+    min-height: 6px;
+    margin: 3px 19px;
+    border-radius: 3px;
+    padding: 0;
+    background-color: #6c5745;
+    border: none;
+    transition: background-color 200ms ease-in-out,
+                min-width 200ms ease-in-out,
+                min-height 200ms ease-in-out;
+}
+
+.ws-dot:hover {
+    background-color: #b6a285;
+}
+
+.ws-dot label {
+    font-size: 0;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.ws-dot.focused {
+    min-width: 8px;
+    min-height: 8px;
+    margin: 3px 18px;
+    border-radius: 4px;
+    background-color: #d6a241;
+}
+
+.ws-dot.active {
+    background-color: #e1b65a;
+}
+
+/* ─── Clock ───────────────────────────────────────────────────────────── */
+.clock {
+    padding: 6px 2px;
+    background-color: alpha(#d6a241, 0.10);
+    border-radius: 6px;
+    margin: 0 2px;
+}
+
+.clock-hour,
+.clock-minute {
+    font-size: 22px;
+    font-weight: 700;
+    color: #d6a241;
+}
+
+.clock-minute {
+    color: #e1b65a;
+    font-weight: 400;
+    margin-top: 2px;
+}
+
+/* ─── Module (shared) ─────────────────────────────────────────────────── */
+.module {
+    padding: 4px 0;
+    margin: 2px 0;
+    border-radius: 0;
+    transition: background-color 200ms ease-in-out;
+}
+
+.module:hover {
+    background-color: alpha(#745234, 0.3);
+}
+.cpu:hover        { background-color: alpha(#639cce, 0.15); }
+.ram:hover        { background-color: alpha(#e1b65a, 0.15); }
+.volume:hover     { background-color: alpha(#b166c0, 0.15); }
+.brightness:hover { background-color: alpha(#d6a241, 0.15); }
+.network:hover    { background-color: alpha(#4fafac, 0.15); }
+.bluetooth:hover  { background-color: alpha(#639cce, 0.15); }
+.battery:hover    { background-color: alpha(#79ba58, 0.15); }
+
+.module-icon {
+    font-size: 18px;
+    color: #b6a285;
+    transition: opacity 200ms ease-in-out;
+}
+
+.module:hover .module-icon {
+    opacity: 0.85;
+}
+
+.module-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: #e4d7c2;
+    margin-top: 2px;
+    transition: color 200ms ease-in-out;
+}
+
+.module:hover .module-value {
+    color: #e4d7c2;
+}
+
+/* ─── Per-module colors ──────────────────────────────────────────────── */
+.cpu             { box-shadow: inset 3px 0 0 0 #639cce; }
+.cpu-icon        { color: #639cce; }
+.cpu-value       { color: #639cce; }
+.ram             { box-shadow: inset 3px 0 0 0 #e1b65a; }
+.ram-icon        { color: #e1b65a; }
+.ram-value       { color: #e1b65a; }
+.volume          { box-shadow: inset 3px 0 0 0 #b166c0; }
+.volume-icon     { color: #b166c0; }
+.volume-value    { color: #b166c0; }
+.volume-value.muted { color: #6c5745; }
+.brightness      { box-shadow: inset 3px 0 0 0 #d6a241; }
+.brightness-icon { color: #d6a241; }
+.brightness-value { color: #d6a241; }
+.network         { box-shadow: inset 3px 0 0 0 #4fafac; }
+.network-icon           { color: #4fafac; }
+.network-icon.connected { color: #4fafac; }
+.network-icon.disconnected { color: #6c5745; }
+.bluetooth       { box-shadow: inset 3px 0 0 0 #639cce; }
+.bluetooth-icon           { color: #639cce; }
+.bluetooth-icon.connected { color: #639cce; }
+.bluetooth-icon.off       { color: #6c5745; }
+.battery         { box-shadow: inset 3px 0 0 0 #79ba58; }
+.battery-icon    { color: #79ba58; }
+.battery-value   { color: #79ba58; }
+.battery-value.critical { color: #ca4949; }
+.battery-value.low      { color: #cb5e3d; }
+.battery-value.charging { color: #79ba58; }
+
+/* ═══════════════════════════════════════════════════════════════════════════ */
+/* ─── Dashboard Overlay ──────────────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════ */
+
+.dashboard-window {
+    background: transparent;
+    background-color: transparent;
+}
+
+.dashboard-left {
+    min-width: 460px;
+}
+
+.dashboard-right {
+    min-width: 440px;
+}
+
+/* ─── Cards (shared) ─────────────────────────────────────────────────────── */
+.card {
+    border-radius: 16px;
+    padding: 22px;
+    color: #e4d7c2;
+    font-family: "Iosevka Nerd Font";
+}
+
+.section-header {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #b6a285;
+}
+
+/* ─── Calendar Card — amber-tinted dark ──────────────────────────────────── */
+.calendar-card {
+    background-color: alpha(#150a04, 0.90);
+    border: none;
+    border-left: 4px solid #d6a241;
+}
+
+.calendar-card .section-header {
+    color: #d6a241;
+}
+
+.cal-nav {
+    margin-bottom: 10px;
+}
+
+.cal-nav-btn {
+    font-size: 22px;
+    color: #b6a285;
+    background: transparent;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 6px;
+    transition: background-color 200ms ease-in-out;
+}
+
+.cal-nav-btn:hover {
+    background-color: alpha(#d6a241, 0.15);
+    color: #d6a241;
+}
+
+.cal-nav-title-btn {
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    transition: background-color 200ms ease-in-out;
+}
+
+.cal-nav-title-btn:hover {
+    background-color: alpha(#d6a241, 0.10);
+}
+
+.cal-nav-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e4d7c2;
+}
+
+.day-names {
+    margin-bottom: 6px;
+}
+
+.day-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #6c5745;
+    padding: 4px 0;
+}
+
+.day-cell {
+    font-size: 16px;
+    color: #b6a285;
+    padding: 5px 0;
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    transition: background-color 200ms ease-in-out;
+}
+
+.day-cell:hover {
+    background-color: alpha(#d6a241, 0.12);
+}
+
+.day-empty {
+    color: transparent;
+    background: transparent;
+    min-height: 0;
+    padding: 0;
+}
+
+.day-empty:hover {
+    background: transparent;
+}
+
+.day-today {
+    background-color: alpha(#d6a241, 0.20);
+    color: #d6a241;
+    font-weight: 700;
+}
+
+.day-today:hover {
+    background-color: alpha(#d6a241, 0.30);
+}
+
+.day-selected {
+    border: 2px solid alpha(#639cce, 0.60);
+    color: #e4d7c2;
+}
+
+.day-selected.day-today {
+    background-color: alpha(#d6a241, 0.25);
+    border-color: alpha(#639cce, 0.60);
+    color: #d6a241;
+}
+
+/* ─── Events Card — blue-tinted dark ─────────────────────────────────────── */
+.events-card {
+    background-color: alpha(#150a04, 0.90);
+    border: none;
+    border-left: 4px solid #639cce;
+}
+
+.events-card .section-header {
+    color: #639cce;
+}
+
+.events-empty {
+    font-size: 16px;
+    color: #6c5745;
+    font-style: italic;
+    padding: 8px 0;
+}
+
+.event-row {
+    padding: 5px 0;
+    border-radius: 6px;
+    transition: background-color 200ms ease-in-out;
+}
+
+.event-row:hover {
+    background-color: alpha(#639cce, 0.08);
+}
+
+.event-time {
+    font-size: 16px;
+    font-weight: 700;
+    color: #639cce;
+    min-width: 55px;
+}
+
+.event-title {
+    font-size: 16px;
+    color: #e4d7c2;
+}
+
+/* ─── Weather Card — teal-tinted dark ────────────────────────────────────── */
+.weather-card {
+    background-color: alpha(#150a04, 0.90);
+    border: none;
+    border-left: 4px solid #4fafac;
+}
+
+.weather-card .section-header {
+    color: #4fafac;
+}
+
+.weather-current {
+    margin-bottom: 10px;
+}
+
+.weather-temp {
+    font-size: 32px;
+    font-weight: 700;
+    color: #e4d7c2;
+}
+
+.weather-highlow {
+    font-size: 16px;
+    color: #b6a285;
+    padding-top: 8px;
+}
+
+.weather-condition {
+    font-size: 16px;
+    color: #b6a285;
+    margin-top: 2px;
+}
+
+.weather-icon {
+    font-size: 48px;
+    color: #4fafac;
+    margin-right: 4px;
+}
+
+.weather-details {
+    margin-bottom: 14px;
+}
+
+.weather-detail {
+    font-size: 15px;
+    color: #b6a285;
+}
+
+.weather-hourly {
+    margin-bottom: 10px;
+}
+
+.hourly-slot {
+    padding: 10px 14px;
+    border-radius: 10px;
+    background-color: alpha(#4fafac, 0.10);
+}
+
+.hourly-time {
+    font-size: 14px;
+    color: #6c5745;
+    font-weight: 700;
+}
+
+.hourly-icon {
+    font-size: 22px;
+    color: #4fafac;
+}
+
+.hourly-temp {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e4d7c2;
+}
+
+.hourly-pop {
+    font-size: 13px;
+    color: #639cce;
+}
+
+.weather-more {
+    margin-top: 6px;
+}
+
+.weather-more-btn {
+    font-size: 14px;
+    color: #6c5745;
+    background: transparent;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: color 200ms ease-in-out;
+}
+
+.weather-more-btn:hover {
+    color: #4fafac;
+}
+
+/* ─── Notes Card — green-tinted dark ─────────────────────────────────────── */
+.notes-card {
+    background-color: alpha(#150a04, 0.90);
+    border: none;
+    border-left: 4px solid #79ba58;
+    transition: background-color 200ms ease-in-out;
+}
+
+.notes-card:hover {
+    background-color: alpha(#392214, 0.85);
+}
+
+.notes-card .section-header {
+    color: #79ba58;
+}
+
+.notes-content {
+    font-size: 16px;
+    color: #b6a285;
+    padding: 4px 0;
+}
+
+.notes-empty-text {
+    color: #6c5745;
+    font-style: italic;
+}
+
+/* ─── Music Card — lavender-tinted dark ──────────────────────────────────── */
+.music-card {
+    background-color: alpha(#150a04, 0.90);
+    border: none;
+    border-left: 4px solid #b166c0;
+}
+
+.music-card .section-header {
+    color: #b166c0;
+}
+
+.music-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #e4d7c2;
+}
+
+.music-title.music-empty {
+    color: #6c5745;
+    font-weight: 400;
+    font-style: italic;
+}
+
+.music-artist {
+    font-size: 15px;
+    color: #b6a285;
+}
+
+.music-controls {
+    margin-top: 10px;
+}
+
+.music-btn {
+    font-size: 24px;
+    color: #b6a285;
+    background: transparent;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    transition: background-color 200ms ease-in-out,
+                color 200ms ease-in-out;
+}
+
+.music-btn:hover {
+    background-color: alpha(#b166c0, 0.15);
+    color: #b166c0;
+}
+
+.music-btn-play {
+    font-size: 30px;
+}
+
+.music-btn:disabled {
+    color: #6c5745;
+}
+
+.music-btn:disabled:hover {
+    background: transparent;
+    color: #6c5745;
+}
