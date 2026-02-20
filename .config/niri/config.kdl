@@ -130,7 +130,7 @@ hotkey-overlay {
 
 // Tema dark
 environment {
-    XCURSOR_THEME "Bibata-Modern-Amber"
+    XCURSOR_THEME "phinger-cursors-dark"
     XCURSOR_SIZE "24"
 }
 
