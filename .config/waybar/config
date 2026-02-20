@@ -6,13 +6,14 @@
 {
     "layer": "top",
     "position": "top",
-    "height": 30,
+    "height": 38,
     "spacing": 4,
 
     "modules-left": [
         "custom/power",
         "niri/workspaces",
-        "niri/window"
+        "niri/window",
+        "tray"
     ],
 
     "modules-center": [
@@ -20,15 +21,13 @@
     ],
 
     "modules-right": [
-        "custom/media",
         "cpu",
         "memory",
         "network",
         "bluetooth",
-        "pulseaudio",
+        "wireplumber",
         "backlight",
-        "battery",
-        "tray"
+        "battery"
     ],
 
     // ── Módulos ────────────────────────────────────────────────────────────
@@ -107,24 +106,19 @@
     },
 
     "bluetooth": {
-        "format-on": "󰂯",
+        "format": "󰂯",
         "format-off": "󰂲",
         "format-connected": "󰂱 {device_alias}",
         "tooltip-format-connected": "{device_enumerate}",
-        "on-click": "blueberry"
+        "on-click": "blueman-manager"
     },
 
-    "pulseaudio": {
+    "wireplumber": {
         "format": "{icon}  {volume}%",
-        "format-bluetooth": "󰂱  {volume}%",
         "format-muted": "󰝟  mudo",
-        "format-icons": {
-            "headphone": "󰋋",
-            "headset": "󰋎",
-            "default": ["󰕿", "󰖀", "󰕾"]
-        },
+        "format-icons": ["󰕿", "󰖀", "󰕾"],
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
-        "on-click-right": "pavucontrol"
+        "on-click-right": "pwvucontrol"
     },
 
     "backlight": {

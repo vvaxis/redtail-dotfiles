@@ -24,13 +24,13 @@
     horizontal_padding = 14
     text_icon_padding = 12
     frame_width = 2
-    frame_color = "#3d352e"
+    frame_color = "#4d3b28"
     gap_size = 4
     separator_color = frame
     corner_radius = 10
 
     # ── Tipografia ────────────────────────────────────────────────────────
-    font = Iosevka Nerd Font 10
+    font = Iosevka Nerd Font 11
     line_height = 2
     markup = full
     format = "<b>%s</b>\n%b"
@@ -68,15 +68,15 @@
 
 # ── Urgência: baixa (informação, confirmações) ───────────────────────────
 [urgency_low]
-    background = "#1a1714"
+    background = "#2a1f14"
     foreground = "#b0a48e"
-    frame_color = "#3d352e"
+    frame_color = "#4d3b28"
     highlight = "#8aab72"
     timeout = 5
 
 # ── Urgência: normal (notificações padrão) ───────────────────────────────
 [urgency_normal]
-    background = "#1a1714"
+    background = "#2a1f14"
     foreground = "#e2d5c0"
     frame_color = "#d4a243"
     highlight = "#d4a243"
@@ -84,7 +84,7 @@
 
 # ── Urgência: crítica (alertas importantes) ──────────────────────────────
 [urgency_critical]
-    background = "#2a2420"
+    background = "#3b2d1e"
     foreground = "#e2d5c0"
     frame_color = "#c25d5d"
     highlight = "#c25d5d"

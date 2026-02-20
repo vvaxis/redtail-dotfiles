@@ -51,9 +51,9 @@ layout {
 
     // Focus ring — âmbar quente (acento primário redtail)
     focus-ring {
-        width 2
+        width 3
         active-color "#d4a243"
-        inactive-color "#3d352e"
+        inactive-color "#4d3b28"
     }
 
     border {
@@ -63,10 +63,10 @@ layout {
     shadow {
         on
         draw-behind-window false
-        softness 30
-        spread 5
+        softness 20
+        spread 3
         offset x=0 y=5
-        color "#0007"
+        color "#00001a"
     }
 
     tab-indicator {
@@ -77,7 +77,7 @@ layout {
         position "top"
         place-within-column
         active-color "#d4a243"
-        inactive-color "#3d352e"
+        inactive-color "#4d3b28"
     }
 
     struts {
@@ -107,7 +107,7 @@ overview {
         offset x=0 y=5
         color "#00000050"
     }
-    backdrop-color "#1a1714"
+    backdrop-color "#2a1f14"
 
 }
 
@@ -120,7 +120,7 @@ window-rule {
     clip-to-geometry true
 }
 
-screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+screenshot-path "~/Imagens/screenshots/screenshot_%Y-%m-%d_%H-%M-%S.png"
 
 animations {}
 
@@ -130,7 +130,7 @@ hotkey-overlay {
 
 // Tema dark
 environment {
-    XCURSOR_THEME "phinger-cursors-dark"
+    XCURSOR_THEME "Bibata-Modern-Amber"
     XCURSOR_SIZE "24"
 }
 
@@ -144,6 +144,7 @@ spawn-at-startup "dunst"
 spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/vvaxis/Imagens/wallpapers/redtail.jpg"
 // spawn-at-startup "blueberry-tray"
 spawn-at-startup "swayidle" "-w" "timeout" "300" "swaylock" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
+spawn-at-startup "eww" "daemon"
 
 
 // ─── WINDOW RULES ───────────────────────────────────────────────────────────
@@ -154,6 +155,17 @@ layer-rule {
     place-within-backdrop true
 }
 
+// EWW Dashboard — ocultar em screencast
+layer-rule {
+    match namespace="^eww-dashboard-left$"
+    block-out-from "screencast"
+}
+
+layer-rule {
+    match namespace="^eww-dashboard-right$"
+    block-out-from "screencast"
+}
+
 // WezTerm: fix de bug no tamanho inicial
 window-rule {
     match app-id=r#"^org\.wezfurlong\.wezterm$"#
@@ -162,25 +174,25 @@ window-rule {
 
 // Firefox/LibreWolf PiP como flutuante
 window-rule {
-    match app-id=r#"brave$"# title="^Picture-in-Picture$"
+    match app-id=r#"zen-browser$"# title="^Picture-in-Picture$"
     open-floating true
 }
 
 window-rule {
-    match app-id=r#"brave$"# title="^Picture-in-Picture$"
+    match app-id=r#"zen-browser$"# title="^Picture-in-Picture$"
     open-floating true
 }
 
-// Brave PiP
+// Zen PiP
 window-rule {
-    match app-id=r#"brave"# title="^Picture-in-Picture$"
+    match app-id=r#"zen-browser"# title="^Picture-in-Picture$"
     open-floating true
 }
 
 // Opacidade de janelas inativas
 window-rule {
     match is-active=false
-    opacity 0.8
+    opacity 0.7
 }
 
 
@@ -189,15 +201,16 @@ binds {
     // ── Programas ───────────────────────────────────────────────────────
     Mod+Z       { spawn "foot"; }                              // Terminal
     Mod+TAB     { spawn "fuzzel"; }                            // Launcher
-    Mod+A       { spawn "brave"; }                         // Browser
+    Mod+A       { spawn "zen-browser"; }                         // Browser
     Mod+E       { spawn "nautilus"; }                          // File manager
     Mod+G       { spawn "foot" "-e" "btop"; }                  // System monitor
     Mod+Y       { spawn "foot" "-e" "yazi"; }                  // File manager (terminal)
     Mod+N       { spawn-sh "dunstctl history-pop"; }           // Recall última notificação
     Mod+Shift+N { spawn-sh "dunstctl close-all"; }             // Fechar todas notificações
     Mod+Escape  { spawn "swaylock"; }                          // Lock
-    Mod+B       { spawn "blueberry"; }                         // Bluetooth
+    Mod+B       { spawn "blueman-manager"; }                   // Bluetooth
     Mod+Shift+W { spawn-sh "pkill waybar; waybar &"; }         // Restart waybar
+    Mod+D       { spawn "sh" "-c" "~/.config/eww/scripts/toggle-dashboard.sh"; } // Dashboard
 
     // ── Controle de janelas ─────────────────────────────────────────────
     Mod+Q          { close-window; }
@@ -322,9 +335,9 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
 
     // ── Screenshots ─────────────────────────────────────────────────────
-    Print       { screenshot; }
-    Ctrl+Print  { screenshot-screen; }
-    Alt+Print   { screenshot-window; }
+    Print           { screenshot-screen; }
+    Mod+Print       { screenshot; }
+    Alt+Print       { screenshot-window; }
 
     // ── Overview e sessão ───────────────────────────────────────────────
     Mod+O          { toggle-overview; }

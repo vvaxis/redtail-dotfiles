@@ -1,0 +1,31 @@
+#!/bin/sh
+# Battery low notification — redtail
+# Notifies at 20%, 15%, 10%, 5% (only while discharging, once per level)
+
+STATEFILE="/tmp/.battery-notify-last"
+BAT="/sys/class/power_supply/BAT0"
+
+capacity=$(cat "$BAT/capacity")
+status=$(cat "$BAT/status")
+
+[ "$status" = "Discharging" ] || { rm -f "$STATEFILE"; exit 0; }
+
+last=$(cat "$STATEFILE" 2>/dev/null || echo "")
+
+for threshold in 20 15 10 5; do
+    if [ "$capacity" -le "$threshold" ] && [ "$last" != "$threshold" ]; then
+        if [ "$threshold" -le 5 ]; then
+            urgency="critical"
+            icon="battery-empty"
+        elif [ "$threshold" -le 10 ]; then
+            urgency="critical"
+            icon="battery-caution"
+        else
+            urgency="normal"
+            icon="battery-low"
+        fi
+        notify-send -u "$urgency" -i "$icon" "Bateria em ${capacity}%" "Conecte o carregador."
+        echo "$threshold" > "$STATEFILE"
+        exit 0
+    fi
+done

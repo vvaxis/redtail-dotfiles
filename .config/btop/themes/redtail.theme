@@ -1,0 +1,77 @@
+# Redtail Cafe theme for btop
+
+# Main background, empty for terminal default (transparency)
+theme[main_bg]=""
+
+# Main text color
+theme[main_fg]="#b0a48e"
+
+# Title color for boxes
+theme[title]="#e2d5c0"
+
+# Highlight color for keyboard shortcuts
+theme[hi_fg]="#d4a243"
+
+# Background color of selected items
+theme[selected_bg]="#3b2d1e"
+
+# Foreground color of selected items
+theme[selected_fg]="#d4a243"
+
+# Color of inactive/disabled text
+theme[inactive_fg]="#4d3b28"
+
+# Color of text appearing on top of graphs
+theme[graph_text]="#6b5f52"
+
+# Misc colors for processes box
+theme[proc_misc]="#d4a243"
+
+# Box outline colors
+theme[cpu_box]="#4d3b28"
+theme[mem_box]="#4d3b28"
+theme[net_box]="#4d3b28"
+theme[proc_box]="#4d3b28"
+
+# Box divider line
+theme[div_line]="#4d3b28"
+
+# Temperature graph colors
+theme[temp_start]="#7a9ec2"
+theme[temp_mid]="#c46d4d"
+theme[temp_end]="#c25d5d"
+
+# CPU graph colors
+theme[cpu_start]="#8aab72"
+theme[cpu_mid]="#d4a243"
+theme[cpu_end]="#c25d5d"
+
+# Mem/Disk free meter
+theme[free_start]="#3b2d1e"
+theme[free_mid]=""
+theme[free_end]="#8aab72"
+
+# Mem/Disk cached meter
+theme[cached_start]="#7a9ec2"
+theme[cached_mid]=""
+theme[cached_end]="#92b4d4"
+
+# Mem/Disk available meter
+theme[available_start]="#d4a243"
+theme[available_mid]=""
+theme[available_end]="#e0b65b"
+
+# Mem/Disk used meter
+theme[used_start]="#c46d4d"
+theme[used_mid]=""
+theme[used_end]="#c25d5d"
+
+# Download graph colors
+theme[download_start]="#3b2d1e"
+theme[download_mid]="#6fa3a0"
+theme[download_end]="#88bab7"
+
+# Upload graph colors
+theme[upload_start]="#3b2d1e"
+theme[upload_mid]="#b07ab8"
+theme[upload_end]="#c494cc"

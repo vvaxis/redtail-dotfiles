@@ -4,9 +4,9 @@
    ============================================================================ */
 
 /* ── Paleta Redtail ───────────────────────────────────────────────────────── */
-@define-color base       #1a1714;
-@define-color surface    #2a2420;
-@define-color overlay    #3d352e;
+@define-color base       #2a1f14;
+@define-color surface    #3b2d1e;
+@define-color overlay    #4d3b28;
 @define-color text       #e2d5c0;
 @define-color subtext    #b0a48e;
 @define-color amber      #d4a243;
@@ -20,8 +20,8 @@
 
 /* ── Base ─────────────────────────────────────────────────────────────────── */
 * {
-    font-family: "Iosevka Nerd Font", "Iosevka Nerd Font", monospace;
-    font-size: 13px;
+    font-family: "Iosevka Nerd Font", "Iosevka NF", monospace;
+    font-size: 15px;
     border: none;
     border-radius: 0;
     min-height: 0;
@@ -34,20 +34,18 @@
 window#waybar {
     background: transparent;
     color: @text;
+    margin: 0;
 }
 
 /* ── Grupos de módulos: pílulas com vidro quente ──────────────────────────── */
 .modules-left,
 .modules-center,
 .modules-right {
-    background: alpha(@base, 0.82);
+    background: alpha(@base, 0.90);
     margin: 6px 8px;
     padding: 2px 8px;
     border-radius: 12px;
     border: 1px solid alpha(@amber, 0.20);
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.30),
-        0 0 12px alpha(@amber, 0.06);
 }
 
 .modules-left {
@@ -93,9 +91,9 @@ window#waybar {
     border-radius: 8px;
     background: transparent;
     color: @subtext;
-    font-family: "Iosevka Nerd Font", "Iosevka Nerd Font", monospace;
+    font-family: "Iosevka Nerd Font", "Iosevka NF", monospace;
     font-weight: 600;
-    font-size: 12px;
+    font-size: 13px;
     border: none;
     transition: all 0.15s ease;
 }
@@ -103,20 +101,17 @@ window#waybar {
 #workspaces button.active {
     color: @base;
     background: linear-gradient(135deg, @amber 0%, alpha(@yellow, 0.90) 100%);
-    box-shadow: 0 2px 8px alpha(@amber, 0.35);
     border: 1px solid alpha(@amber, 0.40);
 }
 
 #workspaces button:hover {
     background: alpha(@surface, 0.90);
     color: @text;
-    box-shadow: 0 1px 4px alpha(@amber, 0.15);
 }
 
 #workspaces button.urgent {
     background: linear-gradient(135deg, alpha(@red, 0.80) 0%, alpha(@terracotta, 0.90) 100%);
     color: @text;
-    box-shadow: 0 2px 8px alpha(@red, 0.40);
 }
 
 /* ── Window title ─────────────────────────────────────────────────────────── */
@@ -130,7 +125,7 @@ window#waybar {
 #battery,
 #network,
 #bluetooth,
-#pulseaudio,
+#wireplumber,
 #backlight,
 #clock,
 #cpu,
@@ -140,7 +135,6 @@ window#waybar {
     border-radius: 8px;
     margin: 5px 2px;
     padding: 4px 10px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
 }
 
 /* ── Clock: acento principal âmbar ────────────────────────────────────────── */
@@ -152,19 +146,19 @@ window#waybar {
 
 /* ── CPU ──────────────────────────────────────────────────────────────────── */
 #cpu {
-    background: linear-gradient(135deg, alpha(@blue, 0.70) 0%, alpha(@blue, 0.80) 100%);
+    background: linear-gradient(135deg, alpha(@blue, 0.85) 0%, alpha(@blue, 0.92) 100%);
     color: @base;
 }
 
 /* ── Memória ──────────────────────────────────────────────────────────────── */
 #memory {
-    background: linear-gradient(135deg, alpha(@yellow, 0.70) 0%, alpha(@amber, 0.80) 100%);
+    background: linear-gradient(135deg, alpha(@yellow, 0.85) 0%, alpha(@amber, 0.92) 100%);
     color: @base;
 }
 
 /* ── Bateria ──────────────────────────────────────────────────────────────── */
 #battery {
-    background: linear-gradient(135deg, alpha(@green, 0.75) 0%, alpha(@green, 0.85) 100%);
+    background: linear-gradient(135deg, alpha(@green, 0.85) 0%, alpha(@green, 0.92) 100%);
     color: @base;
 }
 
@@ -181,12 +175,11 @@ window#waybar {
 #battery.critical:not(.charging) {
     background: linear-gradient(135deg, alpha(@red, 0.85) 0%, alpha(@terracotta, 0.90) 100%);
     color: @text;
-    box-shadow: 0 2px 8px alpha(@red, 0.35);
 }
 
 /* ── Rede ─────────────────────────────────────────────────────────────────── */
 #network {
-    background: linear-gradient(135deg, alpha(@teal, 0.75) 0%, alpha(@teal, 0.85) 100%);
+    background: linear-gradient(135deg, alpha(@teal, 0.85) 0%, alpha(@teal, 0.92) 100%);
     color: @base;
 }
 
@@ -202,30 +195,30 @@ window#waybar {
 
 /* ── Bluetooth ────────────────────────────────────────────────────────────── */
 #bluetooth {
-    background: alpha(@surface, 0.70);
+    background: alpha(@surface, 0.85);
     color: @subtext;
     padding: 4px 6px;
 }
 
 #bluetooth.connected {
-    background: linear-gradient(135deg, alpha(@blue, 0.70) 0%, alpha(@blue, 0.80) 100%);
+    background: linear-gradient(135deg, alpha(@blue, 0.85) 0%, alpha(@blue, 0.92) 100%);
     color: @base;
 }
 
-/* ── PulseAudio ───────────────────────────────────────────────────────────── */
-#pulseaudio {
-    background: linear-gradient(135deg, alpha(@lavender, 0.70) 0%, alpha(@lavender, 0.80) 100%);
+/* ── WirePlumber ──────────────────────────────────────────────────────────── */
+#wireplumber {
+    background: linear-gradient(135deg, alpha(@lavender, 0.85) 0%, alpha(@lavender, 0.92) 100%);
     color: @base;
 }
 
-#pulseaudio.muted {
+#wireplumber.muted {
     background: alpha(@overlay, 0.60);
     color: @subtext;
 }
 
 /* ── Backlight ────────────────────────────────────────────────────────────── */
 #backlight {
-    background: linear-gradient(135deg, alpha(@yellow, 0.70) 0%, alpha(@amber, 0.80) 100%);
+    background: linear-gradient(135deg, alpha(@yellow, 0.85) 0%, alpha(@amber, 0.92) 100%);
     color: @base;
 }
 
@@ -251,17 +244,14 @@ window#waybar {
 #battery:hover,
 #network:hover,
 #bluetooth:hover,
-#pulseaudio:hover,
+#wireplumber:hover,
 #backlight:hover,
 #clock:hover,
 #cpu:hover,
 #memory:hover,
 #custom-media:hover,
 #custom-power:hover {
-    box-shadow:
-        0 2px 8px rgba(0, 0, 0, 0.20),
-        0 0 12px alpha(@amber, 0.12);
-    border-color: alpha(@amber, 0.30);
+    opacity: 0.85;
 }
 
 /* ── Tooltips ─────────────────────────────────────────────────────────────── */
@@ -270,7 +260,6 @@ tooltip {
     padding: 10px;
     background-color: alpha(@base, 0.95);
     border: 1px solid alpha(@amber, 0.25);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.40);
 }
 
 tooltip label {

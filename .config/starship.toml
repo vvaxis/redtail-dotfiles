@@ -1,0 +1,66 @@
+# ============================================================================
+# STARSHIP — Redtail prompt
+# Minimal, quente, Iosevka Nerd Font
+# ============================================================================
+
+add_newline = false
+
+format = """$username$hostname$directory$git_branch$git_status
+$character"""
+
+right_format = """$python$rust$nodejs$cmd_duration"""
+
+# ── User@Host ───────────────────────────────────────────────────────────────
+[username]
+show_always = true
+style_user = "#d4a243"
+format = "[$user]($style)"
+
+[hostname]
+ssh_only = false
+style = "bold #c46d4d"
+format = "[@$hostname]($style):"
+
+# ── Directory ───────────────────────────────────────────────────────────────
+[directory]
+style = "bold #e0b65b"
+truncation_length = 3
+truncate_to_repo = false
+
+# ── Git branch ──────────────────────────────────────────────────────────────
+[git_branch]
+symbol = ""
+style = "#8aab72"
+format = " [$symbol$branch]($style)"
+
+# ── Git status ──────────────────────────────────────────────────────────────
+[git_status]
+style = "#c25d5d"
+format = '[$all_status$ahead_behind]($style)'
+
+# ── Languages (only appear inside relevant projects) ────────────────────────
+[python]
+symbol = " "
+style = "#e0b65b"
+format = "[$symbol$version]($style) "
+
+[rust]
+symbol = " "
+style = "#c46d4d"
+format = "[$symbol$version]($style) "
+
+[nodejs]
+symbol = " "
+style = "#8aab72"
+format = "[$symbol$version]($style) "
+
+# ── Command duration (right side, only if > 3s) ─────────────────────────────
+[cmd_duration]
+min_time = 3000
+style = "#6b5f52"
+format = "[$duration]($style)"
+
+# ── Prompt character (second line) ──────────────────────────────────────────
+[character]
+success_symbol = "[▸](bold #d4a243)"
+error_symbol = "[▸](bold #c25d5d)"
