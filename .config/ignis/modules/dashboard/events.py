@@ -14,6 +14,7 @@ CACHE_TTL = 300  # 5 minutes for other days; today expires only on restart
 # Module-level references
 _header_ref = None
 _list_ref = None
+_current_date = None  # date currently displayed — guards against stale async responses
 
 # In-memory cache: {date_str: {"data": dict, "ts": float}}
 _cache = {}
@@ -113,7 +114,9 @@ def _fetch_thread(date_str: str) -> dict:
 
 
 def fetch_events_for_date(d: date):
+    global _current_date
     date_str = d.isoformat()
+    _current_date = date_str
     is_today = (d == date.today())
 
     # Check cache — today never expires (cleared on restart), other days 5min TTL
@@ -126,7 +129,11 @@ def fetch_events_for_date(d: date):
     _show_loading()
 
     def _on_result(result):
-        _show_events(result, date_str=date_str)
+        # Always cache the result
+        _cache[date_str] = {"data": result, "ts": time.time()}
+        # Only update UI if user hasn't navigated away
+        if _current_date == date_str:
+            _show_events(result)
 
     task = ThreadTask(
         target=lambda: _fetch_thread(date_str),

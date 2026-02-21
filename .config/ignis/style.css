@@ -466,11 +466,11 @@
     color: #4fafac;
 }
 
-/* ─── Notes Card — green-tinted dark ─────────────────────────────────────── */
+/* ─── Notes Card — lavender-tinted dark ──────────────────────────────────── */
 .notes-card {
     background-color: alpha(#150a04, 0.90);
     border: none;
-    border-left: 4px solid #79ba58;
+    border-left: 4px solid #b166c0;
     transition: background-color 200ms ease-in-out;
 }
 
@@ -479,7 +479,7 @@
 }
 
 .notes-card .section-header {
-    color: #79ba58;
+    color: #b166c0;
 }
 
 .notes-content {
@@ -493,15 +493,15 @@
     font-style: italic;
 }
 
-/* ─── Music Card — lavender-tinted dark ──────────────────────────────────── */
+/* ─── Music Card — green-tinted dark ─────────────────────────────────────── */
 .music-card {
     background-color: alpha(#150a04, 0.90);
     border: none;
-    border-left: 4px solid #b166c0;
+    border-left: 4px solid #79ba58;
 }
 
 .music-card .section-header {
-    color: #b166c0;
+    color: #79ba58;
 }
 
 .music-title {
@@ -521,6 +521,18 @@
     color: #b6a285;
 }
 
+.music-album {
+    font-size: 14px;
+    color: #6c5745;
+    font-style: italic;
+}
+
+.album-art {
+    border-radius: 8px;
+    min-width: 80px;
+    min-height: 80px;
+}
+
 .music-controls {
     margin-top: 10px;
 }
@@ -537,8 +549,8 @@
 }
 
 .music-btn:hover {
-    background-color: alpha(#b166c0, 0.15);
-    color: #b166c0;
+    background-color: alpha(#79ba58, 0.15);
+    color: #79ba58;
 }
 
 .music-btn-play {
