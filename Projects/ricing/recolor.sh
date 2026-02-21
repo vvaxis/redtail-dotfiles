@@ -27,6 +27,11 @@ FILES=(
     "$HOME/.config/ignis/style.css"
 )
 
+# Convert 6-char hex to "R, G, B" decimal string
+hex_to_rgb() {
+    printf "%d, %d, %d" "0x${1:0:2}" "0x${1:2:2}" "0x${1:4:2}"
+}
+
 # Read palettes into associative arrays
 declare -A OLD NEW
 while IFS='=' read -r key value; do
@@ -40,8 +45,8 @@ while IFS='=' read -r key value; do
 done < "$TARGET"
 
 # Build sed args: two passes to avoid cascading replacements
-# Pass 1: old hex → temporary token
-# Pass 2: temporary token → new hex
+# Pass 1: old value → temporary token
+# Pass 2: temporary token → new value
 SED_TOKENIZE=()
 SED_RESOLVE=()
 CHANGED=0
@@ -51,9 +56,20 @@ for key in "${!OLD[@]}"; do
     old_val="${OLD[$key]}"
     new_val="${NEW[$key]}"
     if [[ "$old_val" != "$new_val" ]]; then
+        # Hex replacement (e.g., 150a04 → 0e0907)
         SED_TOKENIZE+=(-e "s/${old_val}/__P_${key}__/g")
         SED_RESOLVE+=(-e "s/__P_${key}__/${new_val}/g")
-        echo "  $key: $old_val → $new_val"
+
+        # RGB decimal replacement for rgba()/rgb() contexts
+        # Matches "(R, G, B" to avoid false positives on bare numbers
+        old_rgb=$(hex_to_rgb "$old_val")
+        new_rgb=$(hex_to_rgb "$new_val")
+        if [[ "$old_rgb" != "$new_rgb" ]]; then
+            SED_TOKENIZE+=(-e "s/(${old_rgb}/(PR_${key}_/g")
+            SED_RESOLVE+=(-e "s/(PR_${key}_/(${new_rgb}/g")
+        fi
+
+        echo "  $key: $old_val → $new_val  (rgb: $old_rgb → $new_rgb)"
         CHANGED=$((CHANGED + 1))
     fi
 done
