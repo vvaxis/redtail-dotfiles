@@ -7,10 +7,10 @@
     # ── Layout ────────────────────────────────────────────────────────────
     monitor = 0
     follow = keyboard
-    width = (200, 380)
-    height = 150
+    width = (220, 420)
+    height = (0, 180)
     origin = top-right
-    offset = 15x15
+    offset = (20, 20)
     notification_limit = 4
     progress_bar = true
     progress_bar_height = 8
@@ -30,7 +30,7 @@
     corner_radius = 10
 
     # ── Tipografia ────────────────────────────────────────────────────────
-    font = Iosevka Nerd Font 11
+    font = Iosevka Nerd Font 14
     line_height = 2
     markup = full
     format = "<b>%s</b>\n%b"
@@ -70,7 +70,7 @@
 [urgency_low]
     background = "#150a04"
     foreground = "#b6a285"
-    frame_color = "#745234"
+    frame_color = "#79ba58"
     highlight = "#79ba58"
     timeout = 5
 

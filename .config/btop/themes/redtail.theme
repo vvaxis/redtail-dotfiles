@@ -4,7 +4,7 @@
 theme[main_bg]=""
 
 # Main text color
-theme[main_fg]="#b6a285"
+theme[main_fg]="#e4d7c2"
 
 # Title color for boxes
 theme[title]="#e4d7c2"
@@ -19,22 +19,22 @@ theme[selected_bg]="#392214"
 theme[selected_fg]="#d6a241"
 
 # Color of inactive/disabled text
-theme[inactive_fg]="#745234"
+theme[inactive_fg]="#6c5745"
 
 # Color of text appearing on top of graphs
-theme[graph_text]="#6c5745"
+theme[graph_text]="#b6a285"
 
 # Misc colors for processes box
 theme[proc_misc]="#d6a241"
 
 # Box outline colors
-theme[cpu_box]="#745234"
-theme[mem_box]="#745234"
-theme[net_box]="#745234"
-theme[proc_box]="#745234"
+theme[cpu_box]="#b6a285"
+theme[mem_box]="#b6a285"
+theme[net_box]="#b6a285"
+theme[proc_box]="#b6a285"
 
 # Box divider line
-theme[div_line]="#745234"
+theme[div_line]="#b6a285"
 
 # Temperature graph colors
 theme[temp_start]="#639cce"

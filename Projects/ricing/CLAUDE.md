@@ -19,6 +19,8 @@ This is the ricing workspace for **redtail**, the Arch Linux + Niri desktop envi
 
 This is a daily-carry college notebook. It reads PDFs and articles, writes text (Google Docs, .txt, occasionally .docx), codes occasionally, and sometimes runs games. RAM is tight at 6 GB — keep this in mind when suggesting daemons or heavy processes.
 
+**Display density note:** 15.6" at 1080p is dense — UI text is physically small. Font sizes across configs should be **14px minimum**, ideally larger where aesthetically appropriate. Don't default to 11-12px for any user-facing text.
+
 ## The User
 
 João Vítor de Carvalho Almeida, 21, São Paulo. FGV EAESP undergraduate in Public Administration. President of the Conselho Municipal dos Direitos da Juventude de São Paulo. See `PROFILE.md` for full details.
@@ -215,7 +217,7 @@ Palette is defined in `~/Projects/ricing/palette.conf` and propagated to all con
 - **Yazi folder icons:** Still default blue (baked into yazi icon defaults; `prepend_conds` approach broke icons entirely). Status bar info segments (4K, Top, 1/11) are also hardcoded light blue. Both would need Lua plugins to fix. Deemed not worth the effort.
 - **Niri shadow spread > 5:** Causes shadows to merge between adjacent windows. Keep at 3.
 - **micro markdown rendering:** Inline code (backticks) uses the same green as headings — could differentiate. Cursor line highlight is barely visible.
-- **Niri active window borders:** `border { on }` with amber could add contour separation. Not yet applied.
+- **Niri window borders:** Tested with solid and gradient approaches — solid is redundant with focus ring, gradients look bad. Borders stay off.
 - **Zen Browser:** Not themed (browser CSS ricing is its own rabbit hole).
 - **Sidebar volume click:** Doesn't open pipewire GUI. User noted: "Sidebar também não funciona abrir GUI de pipewire ao clicar, consertar."
 - **CSS `spacing` error:** GTK4 CSS parser reports "No property named spacing" on ignis startup. The style.css has NO spacing property — error source is unknown (possibly GTK internals). Cosmetic, doesn't affect rendering.
@@ -234,7 +236,18 @@ The "color usage overhaul" was the biggest design change in this session. The pa
 - Font-rendered power icon (`⏻` label) — pushed sidebar wider, couldn't constrain
 - `border-left` on sidebar modules — added width even with box-shadow workaround attempts; `inset box-shadow` was the solution (zero layout impact)
 
-**Remaining:** The stripe system could be extended to dunst notifications, fuzzel launcher, and other surfaces. The user liked the approach and wants it applied system-wide.
+**Dunst notifications:** Per-urgency colored frames — green (low/informational), amber (normal), red (critical). Font 14px, slightly larger size (width 220-420, dynamic height 0-180, offset 20x20). Position: top-right.
+
+**Fuzzel launcher:** Amber border (`#d6a241`), font 14px, anchored top-left next to the sidebar (x-margin=30, y-margin=15, 28 lines). Feels like a natural extension of the sidebar.
+
+**btop:** Improved readability — main_fg bumped from subtext to text, graph_text from muted to subtext, box outlines to uniform subtext. Per-box accent-colored outlines were tried but looked noisy with ASCII box-drawing characters — reverted to uniform.
+
+**Niri window borders:** Gradient borders (amber fading to transparent) were tried but looked bad — the gradient smears across the perimeter instead of reading as a clean stripe. Borders stay off; the focus ring (3px amber/overlay) is sufficient.
+
+**What doesn't work for stripes:**
+- btop box outlines — ASCII box-drawing characters are too noisy for multi-color treatment
+- Niri window borders — uniform on all 4 sides, no per-side support; gradients look bad
+- Fuzzel — no per-side border support (rofi has this, but fuzzel is lighter and preferred for 6GB RAM)
 
 ### Ignis Dashboard
 
