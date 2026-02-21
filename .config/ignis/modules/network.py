@@ -16,12 +16,19 @@ def network() -> Widget.EventBox:
         css_classes=["module-icon", "network-icon"],
         halign="center",
     )
+    state_label = Widget.Label(
+        label="--",
+        css_classes=["module-value", "network-value"],
+        halign="center",
+    )
 
     if has_service:
         def update(*_args):
             if net.wifi.is_connected:
                 icon.image = "network-wireless-signal-excellent-symbolic"
                 icon.set_css_classes(["module-icon", "network-icon", "connected"])
+                state_label.set_label("on")
+                state_label.set_css_classes(["module-value", "network-value"])
                 try:
                     for dev in net.wifi.devices:
                         if dev.ap and dev.ap.ssid:
@@ -33,10 +40,14 @@ def network() -> Widget.EventBox:
             elif net.ethernet.is_connected:
                 icon.image = "network-wired-symbolic"
                 icon.set_css_classes(["module-icon", "network-icon", "connected"])
+                state_label.set_label("on")
+                state_label.set_css_classes(["module-value", "network-value"])
                 box.set_tooltip_text("Ethernet")
             else:
                 icon.image = "network-wireless-offline-symbolic"
                 icon.set_css_classes(["module-icon", "network-icon", "disconnected"])
+                state_label.set_label("off")
+                state_label.set_css_classes(["module-value", "network-value", "disconnected"])
                 box.set_tooltip_text("Disconnected")
 
         net.wifi.connect("notify::is-connected", update)
@@ -50,7 +61,7 @@ def network() -> Widget.EventBox:
     box = Widget.EventBox(
         vertical=True,
         css_classes=["module", "network"],
-        child=[icon],
+        child=[icon, state_label],
         on_click=on_click,
         on_right_click=on_right_click,
     )

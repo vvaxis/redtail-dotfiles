@@ -170,10 +170,14 @@
 .network-icon           { color: #4fafac; }
 .network-icon.connected { color: #4fafac; }
 .network-icon.disconnected { color: #6c5745; }
+.network-value          { color: #4fafac; }
+.network-value.disconnected { color: #6c5745; }
 .bluetooth       { box-shadow: inset 3px 0 0 0 #639cce; }
 .bluetooth-icon           { color: #639cce; }
 .bluetooth-icon.connected { color: #639cce; }
 .bluetooth-icon.off       { color: #6c5745; }
+.bluetooth-value          { color: #639cce; }
+.bluetooth-value.off      { color: #6c5745; }
 .battery         { box-shadow: inset 3px 0 0 0 #79ba58; }
 .battery-icon    { color: #79ba58; }
 .battery-value   { color: #79ba58; }
@@ -280,7 +284,12 @@
     border-radius: 8px;
     background: transparent;
     border: none;
+    outline: none;
     transition: background-color 200ms ease-in-out;
+}
+
+.day-cell:focus-visible {
+    outline: none;
 }
 
 .day-cell:hover {

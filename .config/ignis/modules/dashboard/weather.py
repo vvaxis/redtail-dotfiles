@@ -4,7 +4,7 @@ import subprocess
 from ignis.widgets import Widget
 from ignis.utils import Poll
 
-WEATHER_SCRIPT = "/home/vvaxis/Projects/dashboard/eww/scripts/weather.py"
+WEATHER_SCRIPT = "/home/vvaxis/.config/ignis/scripts/weather.py"
 
 # Module-level references
 _temp_ref = None
@@ -136,10 +136,11 @@ def weather_card() -> Widget.Box:
     Poll(900_000, _poll_callback)
     # Also fetch immediately
     from ignis.utils import ThreadTask
-    ThreadTask(
+    task = ThreadTask(
         target=_fetch_weather,
-        callback=lambda _t, data: _update_weather(data),
+        callback=lambda data: _update_weather(data),
     )
+    task.run()
 
     return Widget.Box(
         vertical=True,

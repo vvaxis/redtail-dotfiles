@@ -1,6 +1,7 @@
+from gi.repository import Gtk, Gdk
 from ignis.widgets import Widget
 
-from .calendar import calendar_card
+from .calendar import calendar_card, handle_key as calendar_handle_key
 from .events import events_card, fetch_events_for_date
 from .weather import weather_card
 from .notes import notes_card
@@ -8,6 +9,8 @@ from .music import music_card
 
 
 def dashboard_window():
+    events = events_card()
+
     left_panel = Widget.Box(
         vertical=True,
         spacing=24,
@@ -16,7 +19,7 @@ def dashboard_window():
         hexpand=False,
         child=[
             calendar_card(on_day_selected=fetch_events_for_date),
-            events_card(),
+            events,
         ],
     )
     left_panel.set_size_request(460, -1)
@@ -39,16 +42,11 @@ def dashboard_window():
         vertical=False,
         spacing=48,
         css_classes=["dashboard-content"],
-        halign="center",
-        valign="center",
-        hexpand=True,
-        vexpand=True,
         child=[left_panel, right_panel],
     )
 
     window = Widget.Window(
         namespace="ignis-dashboard",
-        anchor=["top", "bottom", "left", "right"],
         exclusivity="ignore",
         layer="overlay",
         kb_mode="on_demand",
@@ -58,5 +56,16 @@ def dashboard_window():
         css_classes=["dashboard-window"],
         child=content,
     )
+
+    # Keyboard navigation
+    def _on_key_pressed(_ctrl, keyval, _keycode, _state):
+        if keyval == Gdk.KEY_Escape:
+            window.set_visible(False)
+            return True
+        return calendar_handle_key(keyval)
+
+    key_ctrl = Gtk.EventControllerKey()
+    key_ctrl.connect("key-pressed", _on_key_pressed)
+    window.add_controller(key_ctrl)
 
     return window

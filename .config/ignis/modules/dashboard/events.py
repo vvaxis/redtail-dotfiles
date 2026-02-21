@@ -1,35 +1,52 @@
 import json
 import subprocess
+import time
 from datetime import date
 
 from ignis.widgets import Widget
 from ignis.utils import ThreadTask
 
-VENV_PYTHON = "/home/vvaxis/Projects/dashboard/eww/scripts/.venv/bin/python3"
-GCAL_SCRIPT = "/home/vvaxis/Projects/dashboard/eww/scripts/gcal-events.py"
+VENV_PYTHON = "/home/vvaxis/.config/ignis/scripts/.venv/bin/python3"
+GCAL_SCRIPT = "/home/vvaxis/.config/ignis/scripts/gcal-events.py"
+
+CACHE_TTL = 300  # 5 minutes for other days; today expires only on restart
 
 # Module-level references
 _header_ref = None
 _list_ref = None
 
+# In-memory cache: {date_str: {"data": dict, "ts": float}}
+_cache = {}
 
-def _make_event_row(event: dict) -> Widget.Box:
-    return Widget.Box(
-        spacing=10,
+
+def _open_link(link: str):
+    if link:
+        subprocess.Popen(["xdg-open", link])
+
+
+def _make_event_row(event: dict) -> Widget.EventBox:
+    link = event.get("link", "")
+    return Widget.EventBox(
         css_classes=["event-row"],
+        on_click=lambda *_: _open_link(link),
         child=[
-            Widget.Label(
-                label=event.get("time", ""),
-                css_classes=["event-time"],
-            ),
-            Widget.Label(
-                label=event.get("title", "(sem título)"),
-                css_classes=["event-title"],
-                halign="start",
-                hexpand=True,
-                ellipsize="end",
-                max_width_chars=32,
-            ),
+            Widget.Box(
+                spacing=10,
+                child=[
+                    Widget.Label(
+                        label=event.get("time", ""),
+                        css_classes=["event-time"],
+                    ),
+                    Widget.Label(
+                        label=event.get("title", "(sem título)"),
+                        css_classes=["event-title"],
+                        halign="start",
+                        hexpand=True,
+                        ellipsize="end",
+                        max_width_chars=32,
+                    ),
+                ],
+            )
         ],
     )
 
@@ -45,7 +62,11 @@ def _show_loading():
         ]
 
 
-def _show_events(data: dict):
+def _show_events(data: dict, date_str: str = ""):
+    # Store in cache
+    if date_str:
+        _cache[date_str] = {"data": data, "ts": time.time()}
+
     if _header_ref is not None:
         label = data.get("dateLabel", "Eventos")
         _header_ref.set_label(f"󰃮  {label}" if label else "󰃮  Eventos")
@@ -92,11 +113,26 @@ def _fetch_thread(date_str: str) -> dict:
 
 
 def fetch_events_for_date(d: date):
+    date_str = d.isoformat()
+    is_today = (d == date.today())
+
+    # Check cache — today never expires (cleared on restart), other days 5min TTL
+    cached = _cache.get(date_str)
+    if cached and (is_today or (time.time() - cached["ts"]) < CACHE_TTL):
+        _show_events(cached["data"])
+        return
+
+    # Cache miss or stale — show loading and fetch
     _show_loading()
-    ThreadTask(
-        target=lambda: _fetch_thread(d.isoformat()),
-        callback=lambda _task, result: _show_events(result),
+
+    def _on_result(result):
+        _show_events(result, date_str=date_str)
+
+    task = ThreadTask(
+        target=lambda: _fetch_thread(date_str),
+        callback=_on_result,
     )
+    task.run()
 
 
 def events_card() -> Widget.Box:

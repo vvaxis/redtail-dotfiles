@@ -1,4 +1,5 @@
 from ignis.widgets import Widget
+import subprocess
 
 
 def _volume_icon(percent: int, muted: bool) -> str:
@@ -61,6 +62,9 @@ def volume() -> Widget.EventBox:
     def toggle_mute(_box):
         speaker.is_muted = not speaker.is_muted
 
+    def open_mixer(_box):
+        subprocess.Popen(["pwvucontrol"])
+
     def scroll_up(_box):
         vol = speaker.volume
         step = 0.05 if vol <= 1.0 else 5
@@ -76,6 +80,7 @@ def volume() -> Widget.EventBox:
         css_classes=["module", "volume"],
         child=[icon, value_label],
         on_click=toggle_mute,
+        on_right_click=open_mixer,
         on_scroll_up=scroll_up,
         on_scroll_down=scroll_down,
     )

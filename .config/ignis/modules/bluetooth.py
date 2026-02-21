@@ -39,20 +39,31 @@ def bluetooth() -> Widget.EventBox:
         css_classes=["module-icon", "bluetooth-icon"],
         halign="center",
     )
+    state_label = Widget.Label(
+        label="--",
+        css_classes=["module-value", "bluetooth-value"],
+        halign="center",
+    )
 
     def update():
         state, devices = _bt_state()
         if state == "on" and devices:
             icon.image = "bluetooth-active-symbolic"
             icon.set_css_classes(["module-icon", "bluetooth-icon", "connected"])
+            state_label.set_label("on")
+            state_label.set_css_classes(["module-value", "bluetooth-value"])
             box.set_tooltip_text(", ".join(devices))
         elif state == "on":
             icon.image = "bluetooth-active-symbolic"
             icon.set_css_classes(["module-icon", "bluetooth-icon"])
+            state_label.set_label("on")
+            state_label.set_css_classes(["module-value", "bluetooth-value"])
             box.set_tooltip_text("Bluetooth on")
         else:
             icon.image = "bluetooth-disabled-symbolic"
             icon.set_css_classes(["module-icon", "bluetooth-icon", "off"])
+            state_label.set_label("off")
+            state_label.set_css_classes(["module-value", "bluetooth-value", "off"])
             box.set_tooltip_text("Bluetooth off")
         return True
 
@@ -62,7 +73,7 @@ def bluetooth() -> Widget.EventBox:
     box = Widget.EventBox(
         vertical=True,
         css_classes=["module", "bluetooth"],
-        child=[icon],
+        child=[icon, state_label],
         on_click=on_click,
     )
 

@@ -1,5 +1,5 @@
 import calendar as cal
-from datetime import date
+from datetime import date, timedelta
 
 from ignis.widgets import Widget
 
@@ -49,6 +49,16 @@ def _day_classes(day: int, year: int, month: int) -> list[str]:
     return classes
 
 
+def _select_day(d: int):
+    """Select a day and fire the callback."""
+    if d > 0:
+        _state["selected_day"] = (_state["year"], _state["month"], d)
+        _rebuild_grid()
+        if _on_day_selected:
+            sel = _state["selected_day"]
+            _on_day_selected(date(sel[0], sel[1], sel[2]))
+
+
 def _rebuild_grid():
     if _grid_ref is None:
         return
@@ -65,12 +75,7 @@ def _rebuild_grid():
 
             def make_click(d):
                 def on_click(_btn):
-                    if d > 0:
-                        _state["selected_day"] = (_state["year"], _state["month"], d)
-                        _rebuild_grid()
-                        if _on_day_selected:
-                            sel = _state["selected_day"]
-                            _on_day_selected(date(sel[0], sel[1], sel[2]))
+                    _select_day(d)
                 return on_click
 
             btn = Widget.Button(
@@ -102,6 +107,26 @@ def _navigate(delta: int):
     _rebuild_grid()
 
 
+def _move_selection(days: int):
+    """Move selected day by delta days, crossing month boundaries."""
+    sel = _state["selected_day"]
+    if not sel:
+        _go_today()
+        return
+
+    current = date(sel[0], sel[1], sel[2])
+    new = current + timedelta(days=days)
+
+    if new.month != _state["month"] or new.year != _state["year"]:
+        _state["year"] = new.year
+        _state["month"] = new.month
+
+    _state["selected_day"] = (new.year, new.month, new.day)
+    _rebuild_grid()
+    if _on_day_selected:
+        _on_day_selected(new)
+
+
 def _go_today():
     today = date.today()
     _state["year"] = today.year
@@ -110,6 +135,34 @@ def _go_today():
     _rebuild_grid()
     if _on_day_selected:
         _on_day_selected(today)
+
+
+def handle_key(keyval):
+    """Handle keyboard navigation. Returns True if consumed."""
+    from gi.repository import Gdk
+
+    if keyval in (Gdk.KEY_Left, Gdk.KEY_h):
+        _move_selection(-1)
+        return True
+    elif keyval in (Gdk.KEY_Right, Gdk.KEY_l):
+        _move_selection(1)
+        return True
+    elif keyval in (Gdk.KEY_Up, Gdk.KEY_k):
+        _move_selection(-7)
+        return True
+    elif keyval in (Gdk.KEY_Down, Gdk.KEY_j):
+        _move_selection(7)
+        return True
+    elif keyval == Gdk.KEY_Page_Up:
+        _navigate(-1)
+        return True
+    elif keyval == Gdk.KEY_Page_Down:
+        _navigate(1)
+        return True
+    elif keyval == Gdk.KEY_t:
+        _go_today()
+        return True
+    return False
 
 
 def calendar_card(on_day_selected=None) -> Widget.Box:
@@ -165,7 +218,7 @@ def calendar_card(on_day_selected=None) -> Widget.Box:
         child=[],
     )
     _grid_ref = grid
-    _rebuild_grid()
+    _go_today()
 
     return Widget.Box(
         vertical=True,

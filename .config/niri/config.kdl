@@ -138,14 +138,12 @@ spawn-at-startup "gsettings" "set" "org.gnome.desktop.interface" "color-scheme" 
 
 
 // ─── AUTOSTART ──────────────────────────────────────────────────────────────
-spawn-at-startup "ignis" "init"
+spawn-at-startup "env" "GSK_RENDERER=cairo" "ignis" "init"
 spawn-at-startup "dunst"
 // nm-applet removido: rede gerenciada pelo módulo ignis sidebar + networkmanager-dmenu
 spawn-at-startup "swaybg" "-m" "fill" "-i" "/home/vvaxis/Imagens/wallpapers/redtail.jpg"
 // spawn-at-startup "blueberry-tray"
 spawn-at-startup "swayidle" "-w" "timeout" "300" "swaylock" "timeout" "600" "niri msg action power-off-monitors" "resume" "niri msg action power-on-monitors"
-// spawn-at-startup "eww" "daemon"  // replaced by ignis dashboard
-spawn-at-startup "ignis" "init"
 
 
 // ─── WINDOW RULES ───────────────────────────────────────────────────────────

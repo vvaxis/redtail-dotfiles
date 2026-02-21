@@ -67,7 +67,7 @@ João Vítor de Carvalho Almeida, 21, São Paulo. FGV EAESP undergraduate in Pub
 | Dotfile management | yadm |
 | AUR helper | yay |
 | Bar | Ignis (vertical sidebar, replaces Waybar) |
-| Dashboard | Ignis (overlay, replaces EWW — toggled via Mod+D) |
+| Dashboard | Ignis (overlay — toggled via Mod+D) |
 
 ### Fonts
 
@@ -110,17 +110,20 @@ All configuration lives under `~/.config/` with standard XDG paths. Key director
 ├── btop/
 │   ├── btop.conf
 │   └── themes/redtail.theme
+├── dashboard/          # Google Calendar credentials + token
 ├── dunst/dunstrc
-├── eww -> ~/Projects/dashboard/eww   # symlink to separate project
 ├── foot/foot.ini
 ├── fuzzel/fuzzel.ini
 ├── gtk-3.0/gtk.css     # palette CSS variables + direct widget overrides
-├── gtk-4.0/gtk.css     # palette CSS variables
+├── gtk-4.0/
+│   ├── gtk.css         # palette CSS variables
+│   └── settings.ini    # gtk-hint-font-metrics=true
 ├── ignis/
 │   ├── config.py       # sidebar + dashboard window definitions
 │   ├── style.css       # shared CSS for sidebar + dashboard
 │   ├── modules/        # sidebar modules (power, clock, volume, etc.)
-│   └── modules/dashboard/  # dashboard cards (calendar, events, weather, notes, music)
+│   ├── modules/dashboard/  # dashboard cards (calendar, events, weather, notes, music)
+│   └── scripts/        # weather.py, gcal-events.py, .venv/, requirements.txt
 ├── micro/
 │   ├── colorschemes/redtail.micro
 │   └── settings.json
@@ -219,9 +222,7 @@ Palette is defined in `~/Projects/ricing/palette.conf` and propagated to all con
 - **micro markdown rendering:** Inline code (backticks) uses the same green as headings — could differentiate. Cursor line highlight is barely visible.
 - **Niri window borders:** Tested with solid and gradient approaches — solid is redundant with focus ring, gradients look bad. Borders stay off.
 - **Zen Browser:** Not themed (browser CSS ricing is its own rabbit hole).
-- **Sidebar volume click:** Doesn't open pipewire GUI. User noted: "Sidebar também não funciona abrir GUI de pipewire ao clicar, consertar."
 - **CSS `spacing` error:** GTK4 CSS parser reports "No property named spacing" on ignis startup. The style.css has NO spacing property — error source is unknown (possibly GTK internals). Cosmetic, doesn't affect rendering.
-- **EWW daemon:** Still installed but no longer used. `spawn-at-startup "eww" "daemon"` is commented out in niri config. The eww symlink at `~/.config/eww` still exists. Clean up when ready.
 
 ### Color Usage — Stripe System
 
@@ -251,25 +252,43 @@ The "color usage overhaul" was the biggest design change in this session. The pa
 
 ### Ignis Dashboard
 
-The EWW dashboard was migrated to Ignis. Both sidebar and dashboard run in a single Ignis process, sharing one CSS file (`~/.config/ignis/style.css`). The dashboard is toggled via `Mod+D` which runs `ignis toggle-window ignis-dashboard`.
+Both sidebar and dashboard run in a single Ignis process, sharing one CSS file (`~/.config/ignis/style.css`). The dashboard is toggled via `Mod+D` which runs `ignis toggle-window ignis-dashboard`. EWW has been fully removed — all scripts now live in `~/.config/ignis/scripts/`.
+
+**Dashboard window:** Non-anchored overlay layer (no full-screen backdrop). The window sizes to its content and floats centered — clicks outside the cards pass through to windows below. Keyboard events are handled via a `Gtk.EventControllerKey` on the window. Escape closes the dashboard.
 
 **Dashboard modules** (`~/.config/ignis/modules/dashboard/`):
-- `calendar.py` — Pure Python calendar grid with Portuguese month names, day selection callback
-- `events.py` — Google Calendar events via existing `gcal-events.py` script (async via ThreadTask)
-- `weather.py` — OpenWeatherMap via existing `weather.py` script (Poll every 15min, hourly slots with `homogeneous=True`)
+- `calendar.py` — Pure Python calendar grid with Portuguese month names, day selection callback, full keyboard navigation (arrows/hjkl for days, Page Up/Down for months, `t` for today)
+- `events.py` — Google Calendar events via `gcal-events.py` script (async via ThreadTask). In-memory cache: today never expires (session lifetime), other days 5min TTL. Clicking an event row opens it in Google Calendar via `xdg-open`.
+- `weather.py` — Open-Meteo API (free, no key needed). Poll every 15min + immediate fetch on startup. Location auto-detected via IP geolocation (`ipinfo.io`), with `~/.config/dashboard/location` as optional manual override. Provides true hourly data and proper daily min/max.
 - `notes.py` — Direct file read of `~/.local/share/dashboard/notes.md` (Poll every 5s, click opens foot+micro)
 - `music.py` — MprisService integration (player_added signal, closed signal on individual players)
-- `dashboard.py` — Main orchestrator: two-panel layout (left: calendar+events, right: weather+notes+music)
+- `dashboard.py` — Main orchestrator: two-panel layout (left: calendar+events, right: weather+notes+music). Wires keyboard controller.
+
+**Dashboard scripts** (`~/.config/ignis/scripts/`):
+- `weather.py` — Open-Meteo fetcher with WMO code → Nerd Font icon mapping, Portuguese condition descriptions, IP geolocation
+- `gcal-events.py` — Google Calendar API fetcher (uses `.venv/` for google-api-python-client). Returns event time, title, and htmlLink.
+- `.venv/` — Python 3.14 virtualenv with Google Calendar API dependencies
+- `requirements.txt` — pip dependencies for the venv
+
+**Sidebar interactivity:**
+- Volume module: right-click opens pwvucontrol
+- CPU/RAM modules: click opens btop in foot terminal
+- Network/Bluetooth modules: show "on"/"off" labels below icons, colored per module accent (teal/blue when on, muted when off)
+
+**GTK4 renderer fix:** GTK4 4.20+ defaults to Vulkan on Wayland, which causes text clipping artifacts with Iosevka Nerd Font on AMD Radeon Lucienne (fractional pixel glyph positioning). Fix: Ignis is spawned with `GSK_RENDERER=cairo` in niri config. Additionally, `gtk-hint-font-metrics=true` is set in `~/.config/gtk-4.0/settings.ini`.
 
 **Key Ignis/GTK4 gotchas:**
 - GTK4 CSS has NO `spacing` property — use `spacing=N` on Widget.Box in Python
 - GTK4 CSS has NO `cursor` property
 - `Widget.Window(popup=True)` dismisses on ANY click including children — use `popup=False` and close via `ignis toggle-window`
+- `Widget.Window(anchor=[all edges])` captures all input even on transparent areas — remove anchors for click-through
 - Window backgrounds need explicit `background: transparent` CSS, scoped via `css_classes` to avoid affecting other windows
 - MprisService signals use underscores (`player_added`), individual players emit `closed`
 - `set_size_request(width, -1)` for fixed widths since CSS `max-width` doesn't work
-
-**Dashboard functionality NOT yet tested:** Calendar day selection → events fetch, notes click-to-edit, music controls. The user explicitly deferred functionality testing: "let's focus on aesthetics first."
+- `ThreadTask(target=fn, callback=fn)` does NOT auto-run — must call `.run()` explicitly
+- ThreadTask callback receives 1 argument (result), not 2
+- GTK4 Vulkan/NGL renderer clips text on AMD iGPUs — use `GSK_RENDERER=cairo` for Ignis
+- GTK4 focus ring on buttons: suppress with `.day-cell:focus-visible { outline: none; }` when custom selection styling exists
 
 ### Reference Material
 
