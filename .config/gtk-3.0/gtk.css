@@ -80,12 +80,12 @@
 
 /* ─── Base surfaces ───────────────────────────────────────────────── */
 window, .background {
-    background-color: #0e0907;
+    background-color: rgba(14, 9, 7, 0.75);
     color: #e4d7c2;
 }
 
 treeview, treeview.view, list, listbox, .view {
-    background-color: #0e0907;
+    background-color: rgba(14, 9, 7, 0.75);
     color: #e4d7c2;
 }
 

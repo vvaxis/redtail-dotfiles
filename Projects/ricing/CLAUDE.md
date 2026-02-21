@@ -186,7 +186,7 @@ Redtail is a warm, dark desktop themed around amber, terracotta, and deep brown 
 - Softens the hard edges between app surfaces
 - Makes the brown palette feel organic rather than painted-on
 
-Transparency is used deliberately, not gratuitously: 80% on terminals (`alpha=0.80` in foot — was 0.90, user lowered it), 90% on dashboard cards, 93% on fuzzel, 70% on inactive windows (aggressive — the user chose this despite readability tradeoff, do not revert), 10% on dunst. btop uses `theme_background = false` to inherit terminal transparency rather than drawing its own. spotify-player also inherits terminal transparency (no `background` in its theme palette).
+Transparency is used deliberately, not gratuitously: 75% on terminals (`alpha=0.75` in foot), 75% on GTK3 app backgrounds (Nemo — via `rgba()` in gtk-3.0/gtk.css; GTK4/libadwaita apps can't do this due to opaque region), 90% on inactive windows (compositor-level dim), 90% on dashboard cards, 93% on fuzzel, 10% on dunst. btop uses `theme_background = false` to inherit terminal transparency rather than drawing its own. spotify-player also inherits terminal transparency (no `background` in its theme palette).
 
 **Minimalism with substance.** The desktop is clean but not empty. The Ignis sidebar provides real system info (CPU, memory, network, battery, Bluetooth state). The Ignis dashboard (Mod+D) overlays calendar, events, weather, notes, and media controls. The lock screen shows time and date inside a clear indicator ring. Nothing is decoration-only — but nothing is ugly or utilitarian either.
 
@@ -220,9 +220,11 @@ v0.5 addressed the "sea of brown" problem: all three dark anchors at the same hu
 
 Palette is defined in `~/Projects/ricing/palette.conf` and propagated to all configs via `recolor.sh` (see Recolor System below).
 
-**Niri window management:** 15px gaps, 8px corner radius, no borders (off), focus ring 3px in amber/overlay. Shadows are subtle: softness 20, spread 3, y-offset 5. Spread was reduced from 8 because it caused shadows to merge between adjacent windows ("dark haze" effect). Inactive windows at 70% opacity.
+**Niri window management:** 15px gaps, 8px corner radius, no borders (off), focus ring 3px in amber/overlay. Shadows are subtle: softness 20, spread 3, y-offset 5. Spread was reduced from 8 because it caused shadows to merge between adjacent windows ("dark haze" effect). Inactive windows at 90% opacity (compositor dim — subtle darkening without revealing wallpaper on opaque apps).
 
-**Key bindings philosophy:** Vim-style (hjkl) alongside arrow keys for all navigation. Mod+Z for terminal (not Mod+Return — Z is closer to the left hand). Mod+Tab for launcher. Mod+A for browser. Single-key launchers for frequently used TUI apps: Mod+G (btop), Mod+Y (yazi), Mod+S (spotify-player). Media/brightness keys work while locked.
+**Key bindings philosophy:** Vim-style (hjkl) alongside arrow keys for all navigation. Mod+Z for terminal (not Mod+Return — Z is closer to the left hand). Mod+Tab for launcher. Mod+A for browser. Single-key launchers for frequently used TUI apps: Mod+G (btop), Mod+Y (yazi), Mod+S (spotify-player). Mod+Shift+C opens niri config in $EDITOR. Media/brightness keys work while locked.
+
+**Niri environment variables:** Daily-driver programs are referenced via shell variables in `spawn-sh` commands, defined in niri's `environment` block: `TERMINAL` (foot), `BROWSER` (zen-browser), `FILE_MANAGER` (nemo), `EDITOR` (micro). Changing a single variable updates all keybindings that use it. Programs unlikely to be swapped (fuzzel, swaylock, blueman, ignis) use `spawn` directly.
 
 ### Known Limitations and Unfinished Work
 
@@ -231,7 +233,7 @@ Palette is defined in `~/Projects/ricing/palette.conf` and propagated to all con
 - **micro markdown rendering:** Inline code (backticks) uses the same green as headings — could differentiate. Cursor line highlight is barely visible.
 - **Niri window borders:** Tested with solid and gradient approaches — solid is redundant with focus ring, gradients look bad. Borders stay off.
 - **Zen Browser:** Not themed (browser CSS ricing is its own rabbit hole). Note: niri compositor opacity rules (applied to active windows) caused Zen to appear brown via wallpaper bleed-through — even though the window didn't look visually transparent. A rendering quirk. Those rules were reverted.
-- **Libadwaita/GTK4 compositor opacity:** Nautilus and other libadwaita apps ignore niri compositor opacity. GTK4/libadwaita sets `wl_surface.set_opaque_region` on the entire window; Smithay/niri respects this and skips alpha blending. Popup menus (separate subsurfaces) do get transparency. No user-level workaround exists — needs niri upstream feature. Nemo was installed as a GTK3 alternative that works with compositor opacity.
+- **Libadwaita/GTK4 transparency:** GTK4/libadwaita apps set `wl_surface.set_opaque_region` on the entire window, blocking both compositor opacity AND CSS-level `rgba()` backgrounds (rgba renders wrong colors instead of transparency because it blends against an internal gray surface, not the wallpaper). No user-level workaround exists. CSS `rgba()` background transparency works on GTK3 apps (Nemo, Blueman) because they don't set opaque region on Wayland. Nemo is the primary GUI file manager; Nautilus remains installed only as a dependency of `xdg-desktop-portal-gnome` (required for screencasting).
 - **GTK theme:** Rewritten in v0.5 with full `@define-color` coverage (34+ variables in GTK4, 50+ in GTK3) and widget overrides for all interactive states (buttons, entries, scrollbar, switches, checks, progress, selection, hover, focus, tooltips, tabs, backdrop). Headerbar has a 3px amber bottom stripe. Button:checked uses subtle amber tint (not solid fill) to avoid painting toolbars solid yellow.
 - **CSS `spacing` error:** GTK4 CSS parser reports "No property named spacing" on ignis startup. The style.css has NO spacing property — error source is unknown (possibly GTK internals). Cosmetic, doesn't affect rendering.
 
@@ -318,7 +320,7 @@ Both sidebar and dashboard run in a single Ignis process, sharing one CSS file (
 - **Surface** (`#3f1f13`): elevated — selections, progress bar unfilled
 
 **Key design decisions:**
-- No `background` or `black` in theme palette → inherits Foot terminal transparency (0.80 alpha)
+- No `background` or `black` in theme palette → inherits Foot terminal transparency (0.75 alpha)
 - `border_type = "Rounded"` — consistent with niri corner radius aesthetic
 - `progress_bar_type = "Line"` — clean, not block-based
 - Cover art at default size (9x5, height 6) — larger sizes created a gap between art and progress bar
@@ -379,7 +381,7 @@ foot.ini, dunstrc, fuzzel.ini, niri/config.kdl, gtk-3.0/gtk.css, gtk-4.0/gtk.css
 1. **Read before editing.** Never propose changes to a config you haven't read.
 2. **Check dependencies before removing packages.** Always run `pactree -r <pkg>` first.
 3. **Don't commit.** The user manages yadm commits himself. Only commit if explicitly asked.
-4. **Don't revert user choices.** Inactive window opacity at 0.7 is intentional. phinger-cursors-dark is the cursor. `add_newline = false` in starship is deliberate. If a setting seems aggressive, it was probably discussed and chosen.
+4. **Don't revert user choices.** Inactive window opacity at 0.90, foot alpha at 0.75, GTK3 rgba backgrounds — all intentional. phinger-cursors-dark is the cursor. `add_newline = false` in starship is deliberate. If a setting seems aggressive, it was probably discussed and chosen.
 5. **Palette changes go through recolor.sh.** Edit `palette.conf`, run `./recolor.sh`. Do not manually edit hex values across configs — the script handles all 13 files. See Recolor System below.
 6. **Perception over theory.** If the user says a color looks gray, it's gray. Don't argue that it's "technically warm" by hex value.
 7. **RAM awareness.** The machine has 6 GB. Don't suggest always-on daemons or memory-heavy tools without accounting for this.
@@ -409,9 +411,10 @@ Remaining notes:
 - Zen Browser (GTK3) proved resistant to `gtk-3.0/gtk.css` changes — may need separate approach.
 - libadwaita apps respect `@define-color` variables but not direct widget overrides — the variables alone cover most visual needs.
 
-### GTK App Transparency
+### GTK App Transparency — DONE (GTK3 only)
 
-Compositor-level transparency (`opacity` in niri window-rules) does not work for libadwaita/GTK4 apps because they set `wl_surface.set_opaque_region`. This is a niri/Smithay limitation — no user-level workaround exists. Options:
-- Wait for niri upstream to add an "ignore opaque region" window rule
-- Accept that GTK4 apps won't have transparency (Nemo works fine as GTK3 alternative to Nautilus)
-- For active-window compositor opacity: **do not re-add** — it caused text to become transparent on all apps (including terminals) and a rendering quirk on Zen Browser
+GTK3 apps (Nemo, Blueman) have CSS-level background transparency via `rgba(14, 9, 7, 0.75)` in `gtk-3.0/gtk.css`. This works because GTK3 on Wayland doesn't set `wl_surface.set_opaque_region`.
+
+GTK4/libadwaita apps (Nautilus) cannot have transparency — they set opaque region AND CSS `rgba()` blends against an internal surface instead of the wallpaper, producing wrong colors. Nautilus remains installed as a dependency of `xdg-desktop-portal-gnome` (portal-gnome provides ScreenCast for screen sharing; replacing with portal-gtk + portal-wlr is possible but risky since portal-wlr is designed for wlroots, not Smithay/niri). Nemo is the daily-driver file manager.
+
+Inactive windows use compositor opacity at 0.90 (niri `match is-active=false`) — subtle dim without revealing wallpaper on opaque apps. Active-window compositor opacity was tested and **should not be re-added** — it caused text transparency on all apps and a rendering quirk on Zen Browser.

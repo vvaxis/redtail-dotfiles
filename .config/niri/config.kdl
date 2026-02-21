@@ -120,6 +120,11 @@ window-rule {
     clip-to-geometry true
 }
 
+window-rule {
+    match is-active=false
+    opacity 0.90
+}
+
 screenshot-path "~/Imagens/screenshots/screenshot_%Y-%m-%d_%H-%M-%S.png"
 
 animations {}
@@ -132,6 +137,10 @@ hotkey-overlay {
 environment {
     XCURSOR_THEME "phinger-cursors-dark"
     XCURSOR_SIZE "24"
+    TERMINAL "foot"
+    BROWSER "zen-browser"
+    FILE_MANAGER "nemo"
+    EDITOR "micro"
 }
 
 spawn-at-startup "gsettings" "set" "org.gnome.desktop.interface" "color-scheme" "prefer-dark"
@@ -200,28 +209,22 @@ window-rule {
 
 
 
-// Opacidade de janelas inativas
-window-rule {
-    match is-active=false
-    opacity 0.7
-}
-
-
 // ─── KEYBINDINGS ────────────────────────────────────────────────────────────
 binds {
     // ── Programas ───────────────────────────────────────────────────────
-    Mod+Z       { spawn "foot"; }                              // Terminal
+    Mod+Z       { spawn-sh "$TERMINAL"; }                      // Terminal
     Mod+TAB     { spawn "fuzzel"; }                            // Launcher
-    Mod+A       { spawn "zen-browser"; }                         // Browser
-    Mod+E       { spawn "nautilus"; }                          // File manager
-    Mod+G       { spawn "foot" "-e" "btop"; }                  // System monitor
-    Mod+Y       { spawn "foot" "-e" "yazi"; }                  // File manager (terminal)
+    Mod+A       { spawn-sh "$BROWSER"; }                       // Browser
+    Mod+E       { spawn-sh "$FILE_MANAGER"; }                  // File manager
+    Mod+G       { spawn-sh "$TERMINAL -e btop"; }              // System monitor
+    Mod+Y       { spawn-sh "$TERMINAL -e yazi"; }              // File manager (terminal)
+    Mod+Shift+C { spawn-sh "$TERMINAL -e $EDITOR /home/vvaxis/.config/niri/config.kdl"; } // Niri config
     Mod+N       { spawn-sh "dunstctl history-pop"; }           // Recall última notificação
     Mod+Shift+N { spawn-sh "dunstctl close-all"; }             // Fechar todas notificações
     Mod+Escape  { spawn "swaylock"; }                          // Lock
     Mod+B       { spawn "blueman-manager"; }                   // Bluetooth
     Mod+Shift+W { spawn-sh "killall ignis; ignis init &"; }    // Restart ignis
-    Mod+S       { spawn "foot" "-e" "spotify_player"; }              // Spotify
+    Mod+S       { spawn-sh "$TERMINAL -e spotify_player"; }      // Spotify
     Mod+D       { spawn "ignis" "toggle-window" "ignis-dashboard"; } // Dashboard
 
     // ── Controle de janelas ─────────────────────────────────────────────
