@@ -1,0 +1,36 @@
+[[themes]]
+name = "redtail"
+
+[themes.palette]
+foreground = "#e4d7c2"
+red = "#ca4949"
+green = "#79ba58"
+yellow = "#e1b65a"
+blue = "#639cce"
+magenta = "#b166c0"
+cyan = "#4fafac"
+white = "#e4d7c2"
+bright_black = "#6c5745"
+bright_red = "#d57070"
+bright_green = "#9dc987"
+bright_yellow = "#d6a241"
+bright_blue = "#8cb5d8"
+bright_magenta = "#c38cce"
+bright_cyan = "#7dbfbc"
+bright_white = "#b6a285"
+
+[themes.component_style]
+border = { fg = "Magenta" }
+block_title = { fg = "BrightYellow", modifiers = ["Bold"] }
+table_header = { fg = "BrightYellow", modifiers = ["Bold"] }
+playback_status = { fg = "Green" }
+playback_track = { fg = "White", modifiers = ["Bold"] }
+playback_artists = { fg = "Blue" }
+playback_album = { fg = "BrightWhite", modifiers = ["Italic"] }
+playback_metadata = { fg = "BrightBlack" }
+playback_progress_bar = { bg = "#392214", fg = "Green" }
+playback_progress_bar_unfilled = { fg = "#392214" }
+current_playing = { fg = "Green", modifiers = ["Bold"] }
+selection = { bg = "#392214", modifiers = ["Bold"] }
+page_desc = { fg = "BrightWhite" }
+like = { fg = "Red" }

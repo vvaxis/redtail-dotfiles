@@ -6,27 +6,27 @@
 cwd = { fg = "#cb5e3d", bold = true }
 
 # Hovered
-hovered         = { bg = "#392214" }
-preview_hovered = { bg = "#392214" }
+hovered         = { bg = "#3f1f13" }
+preview_hovered = { bg = "#3f1f13" }
 
 # Find
 find_keyword  = { fg = "#d6a241", bold = true }
 find_position = { fg = "#b6a285" }
 
 # Marker
-marker_selected = { fg = "#d6a241", bg = "#150a04" }
-marker_copied   = { fg = "#79ba58", bg = "#150a04" }
-marker_cut      = { fg = "#ca4949", bg = "#150a04" }
+marker_selected = { fg = "#d6a241", bg = "#0e0907" }
+marker_copied   = { fg = "#79ba58", bg = "#0e0907" }
+marker_cut      = { fg = "#ca4949", bg = "#0e0907" }
 
 # Tab
-tab_active   = { fg = "#150a04", bg = "#d6a241" }
-tab_inactive = { fg = "#b6a285", bg = "#392214" }
+tab_active   = { fg = "#0e0907", bg = "#d6a241" }
+tab_inactive = { fg = "#b6a285", bg = "#3f1f13" }
 tab_width    = 1
 
 # Count
-count_copied   = { fg = "#150a04", bg = "#79ba58" }
-count_cut      = { fg = "#150a04", bg = "#ca4949" }
-count_selected = { fg = "#150a04", bg = "#d6a241" }
+count_copied   = { fg = "#0e0907", bg = "#79ba58" }
+count_cut      = { fg = "#0e0907", bg = "#ca4949" }
+count_selected = { fg = "#0e0907", bg = "#d6a241" }
 
 # Border
 border_symbol = "│"
@@ -38,9 +38,9 @@ sep_left  = { open = "", close = "" }
 sep_right = { open = "", close = "" }
 
 # Mode
-mode_normal = { fg = "#150a04", bg = "#d6a241", bold = true }
-mode_select = { fg = "#150a04", bg = "#79ba58", bold = true }
-mode_unset  = { fg = "#150a04", bg = "#ca4949", bold = true }
+mode_normal = { fg = "#0e0907", bg = "#d6a241", bold = true }
+mode_select = { fg = "#0e0907", bg = "#79ba58", bold = true }
+mode_unset  = { fg = "#0e0907", bg = "#ca4949", bold = true }
 
 # Progress
 progress_label  = { fg = "#e4d7c2" }
@@ -58,7 +58,7 @@ perm_sep = { fg = "#745234" }
 border   = { fg = "#d6a241" }
 title    = { fg = "#d6a241" }
 value    = { fg = "#e4d7c2" }
-selected = { bg = "#392214" }
+selected = { bg = "#3f1f13" }
 
 [select]
 border   = { fg = "#d6a241" }
@@ -71,7 +71,7 @@ title   = { fg = "#d6a241" }
 hovered = { fg = "#d6a241" }
 
 [which]
-mask            = { bg = "#150a04" }
+mask            = { bg = "#0e0907" }
 cand            = { fg = "#4fafac" }
 rest            = { fg = "#745234" }
 desc            = { fg = "#b6a285" }
@@ -82,7 +82,7 @@ separator_style = { fg = "#745234" }
 on      = { fg = "#d6a241" }
 run     = { fg = "#b6a285" }
 desc    = { fg = "#e4d7c2" }
-hovered = { bg = "#392214" }
+hovered = { bg = "#3f1f13" }
 footer  = { fg = "#b6a285" }
 
 [filetype]

@@ -1,5 +1,5 @@
 /* ─── Redtail v4 Palette ───────────────────────────────────────────────── */
-/* base:       #150a04  surface:    #392214  overlay:    #745234           */
+/* base:       #0e0907  surface:    #3f1f13  overlay:    #745234           */
 /* text:       #e4d7c2  subtext:    #b6a285  muted:      #6c5745           */
 /* amber:      #d6a241  yellow:     #e1b65a  terracotta: #cb5e3d           */
 /* green:      #79ba58  red:        #ca4949  blue:       #639cce           */
@@ -8,7 +8,7 @@
 /* ─── Sidebar Window ──────────────────────────────────────────────────── */
 .sidebar {
     min-width: 44px;
-    background-color: #392214;
+    background-color: #3f1f13;
     color: #e4d7c2;
     font-family: "Iosevka Nerd Font";
     padding: 6px 0;
@@ -219,7 +219,7 @@
 
 /* ─── Calendar Card — amber-tinted dark ──────────────────────────────────── */
 .calendar-card {
-    background-color: alpha(#150a04, 0.90);
+    background-color: alpha(#0e0907, 0.90);
     border: none;
     border-left: 4px solid #d6a241;
 }
@@ -330,7 +330,7 @@
 
 /* ─── Events Card — blue-tinted dark ─────────────────────────────────────── */
 .events-card {
-    background-color: alpha(#150a04, 0.90);
+    background-color: alpha(#0e0907, 0.90);
     border: none;
     border-left: 4px solid #639cce;
 }
@@ -370,7 +370,7 @@
 
 /* ─── Weather Card — teal-tinted dark ────────────────────────────────────── */
 .weather-card {
-    background-color: alpha(#150a04, 0.90);
+    background-color: alpha(#0e0907, 0.90);
     border: none;
     border-left: 4px solid #4fafac;
 }
@@ -468,14 +468,14 @@
 
 /* ─── Notes Card — lavender-tinted dark ──────────────────────────────────── */
 .notes-card {
-    background-color: alpha(#150a04, 0.90);
+    background-color: alpha(#0e0907, 0.90);
     border: none;
     border-left: 4px solid #b166c0;
     transition: background-color 200ms ease-in-out;
 }
 
 .notes-card:hover {
-    background-color: alpha(#392214, 0.85);
+    background-color: alpha(#3f1f13, 0.85);
 }
 
 .notes-card .section-header {
@@ -495,7 +495,7 @@
 
 /* ─── Music Card — green-tinted dark ─────────────────────────────────────── */
 .music-card {
-    background-color: alpha(#150a04, 0.90);
+    background-color: alpha(#0e0907, 0.90);
     border: none;
     border-left: 4px solid #79ba58;
 }

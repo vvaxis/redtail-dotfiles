@@ -1,72 +1,296 @@
-@define-color accent_bg_color #d6a241;
-@define-color accent_color #d6a241;
-@define-color theme_bg_color #150a04;
+/* ─── Redtail GTK3 Theme ─────────────────────────────────────────────
+ * Palette v0.5 — near-black base, warm red-brown surface
+ * ──────────────────────────────────────────────────────────────────── */
+
+/* ─── Legacy GTK3 variables ───────────────────────────────────────── */
+@define-color theme_bg_color #0e0907;
 @define-color theme_fg_color #e4d7c2;
-@define-color theme_base_color #150a04;
+@define-color theme_base_color #0e0907;
 @define-color theme_text_color #e4d7c2;
 @define-color theme_selected_bg_color #d6a241;
-@define-color theme_selected_fg_color #150a04;
-@define-color theme_unfocused_bg_color #150a04;
+@define-color theme_selected_fg_color #0e0907;
+
+@define-color theme_unfocused_bg_color #0e0907;
 @define-color theme_unfocused_fg_color #e4d7c2;
-@define-color theme_unfocused_base_color #150a04;
+@define-color theme_unfocused_base_color #0e0907;
 @define-color theme_unfocused_text_color #e4d7c2;
 @define-color theme_unfocused_selected_bg_color #d6a241;
-@define-color insensitive_bg_color #392214;
+
+@define-color insensitive_bg_color #3f1f13;
 @define-color insensitive_fg_color #6c5745;
 @define-color borders #745234;
 @define-color unfocused_borders #745234;
-@define-color headerbar_bg_color #392214;
-@define-color headerbar_fg_color #e4d7c2;
-@define-color headerbar_backdrop_color #392214;
-@define-color sidebar_bg_color #392214;
-@define-color sidebar_fg_color #e4d7c2;
-@define-color card_bg_color #392214;
-@define-color card_fg_color #e4d7c2;
-@define-color dialog_bg_color #392214;
-@define-color dialog_fg_color #e4d7c2;
-@define-color popover_bg_color #392214;
-@define-color popover_fg_color #e4d7c2;
-@define-color view_bg_color #150a04;
+
+/* ─── libadwaita-compatible variables (read by adw-gtk3) ──────────── */
+@define-color accent_bg_color #d6a241;
+@define-color accent_fg_color #0e0907;
+@define-color accent_color #d6a241;
+
+@define-color window_bg_color #0e0907;
+@define-color window_fg_color #e4d7c2;
+
+@define-color view_bg_color #0e0907;
 @define-color view_fg_color #e4d7c2;
+
+@define-color headerbar_bg_color #3f1f13;
+@define-color headerbar_fg_color #e4d7c2;
+@define-color headerbar_border_color #745234;
+@define-color headerbar_backdrop_color #3f1f13;
+@define-color headerbar_shade_color rgba(14, 9, 7, 0.36);
+
+@define-color sidebar_bg_color #3f1f13;
+@define-color sidebar_fg_color #e4d7c2;
+@define-color sidebar_backdrop_color #3f1f13;
+@define-color sidebar_border_color #745234;
+@define-color sidebar_shade_color rgba(14, 9, 7, 0.36);
+
+@define-color card_bg_color #3f1f13;
+@define-color card_fg_color #e4d7c2;
+@define-color card_shade_color rgba(14, 9, 7, 0.36);
+
+@define-color dialog_bg_color #3f1f13;
+@define-color dialog_fg_color #e4d7c2;
+
+@define-color popover_bg_color #3f1f13;
+@define-color popover_fg_color #e4d7c2;
+@define-color popover_shade_color rgba(14, 9, 7, 0.36);
+
+@define-color shade_color rgba(14, 9, 7, 0.36);
+@define-color scrollbar_outline_color rgba(14, 9, 7, 0.5);
+
+@define-color destructive_bg_color #ca4949;
+@define-color destructive_fg_color #e4d7c2;
+@define-color destructive_color #ca4949;
+
+@define-color success_bg_color #79ba58;
+@define-color success_fg_color #0e0907;
+@define-color success_color #79ba58;
+
 @define-color warning_bg_color #e1b65a;
-@define-color warning_fg_color #150a04;
+@define-color warning_fg_color #0e0907;
+@define-color warning_color #e1b65a;
+
 @define-color error_bg_color #ca4949;
 @define-color error_fg_color #e4d7c2;
-@define-color success_bg_color #79ba58;
-@define-color success_fg_color #150a04;
+@define-color error_color #ca4949;
 
-/* ─── Direct widget overrides ────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════════════════
+ * Widget overrides — color variation on structural elements
+ * ═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Base surfaces ───────────────────────────────────────────────── */
 window, .background {
-    background-color: #150a04;
+    background-color: #0e0907;
     color: #e4d7c2;
 }
 
 treeview, treeview.view, list, listbox, .view {
-    background-color: #150a04;
+    background-color: #0e0907;
     color: #e4d7c2;
 }
 
-treeview:selected, list row:selected, .view:selected {
-    background-color: #d6a241;
-    color: #150a04;
-}
-
+/* ─── Elevated surfaces ───────────────────────────────────────────── */
 toolbar, .toolbar {
-    background-color: #392214;
+    background-color: #3f1f13;
     color: #e4d7c2;
 }
 
 menubar, .menubar {
-    background-color: #392214;
+    background-color: #3f1f13;
     color: #e4d7c2;
 }
 
 menu, .menu {
-    background-color: #392214;
+    background-color: #3f1f13;
+    color: #e4d7c2;
+}
+
+.sidebar, .sidebar .view {
+    background-color: #3f1f13;
     color: #e4d7c2;
 }
 
 statusbar {
-    background-color: #150a04;
+    background-color: #0e0907;
     color: #b6a285;
+}
+
+/* ─── Headerbar — amber bottom stripe ─────────────────────────────── */
+.titlebar, headerbar {
+    background-color: #3f1f13;
+    color: #e4d7c2;
+    border-bottom: 3px solid #d6a241;
+}
+
+.titlebar:backdrop, headerbar:backdrop {
+    background-color: #3f1f13;
+    color: #b6a285;
+    border-bottom-color: #745234;
+}
+
+.titlebar button:hover, headerbar button:hover {
+    background-color: rgba(116, 82, 52, 0.4);
+}
+
+/* ─── Buttons — subtle tints, not solid fills ─────────────────────── */
+button:hover {
+    background-color: rgba(116, 82, 52, 0.35);
+}
+
+button:active {
+    background-color: rgba(214, 162, 65, 0.4);
+    color: #e4d7c2;
+}
+
+button:checked {
+    background-color: rgba(214, 162, 65, 0.25);
+    color: #e4d7c2;
+}
+
+button.suggested-action {
+    background-color: #d6a241;
+    color: #0e0907;
+}
+
+button.suggested-action:hover {
+    background-color: #e1b65a;
+    color: #0e0907;
+}
+
+button.destructive-action {
+    background-color: #ca4949;
+    color: #e4d7c2;
+}
+
+button.destructive-action:hover {
+    background-color: #d57070;
+    color: #e4d7c2;
+}
+
+/* ─── Entries — overlay border, amber focus ────────────────────────── */
+entry, .entry {
+    border-color: #745234;
+}
+
+entry:focus, .entry:focus {
+    border-color: #d6a241;
+}
+
+/* ─── Links — blue, visited lavender ──────────────────────────────── */
+*:link, .link {
+    color: #639cce;
+}
+
+*:link:hover, .link:hover {
+    color: #8cb5d8;
+}
+
+*:visited {
+    color: #b166c0;
+}
+
+/* ─── Scrollbar — overlay, subtext on hover ───────────────────────── */
+scrollbar slider, .scrollbar slider {
+    background-color: #745234;
+    border-radius: 999px;
+}
+
+scrollbar slider:hover, .scrollbar slider:hover {
+    background-color: #b6a285;
+}
+
+scrollbar slider:active, .scrollbar slider:active {
+    background-color: #e4d7c2;
+}
+
+/* ─── Switches — amber when on ────────────────────────────────────── */
+switch:checked {
+    background-color: #d6a241;
+}
+
+switch:checked slider {
+    color: #0e0907;
+}
+
+/* ─── Checkbuttons & radiobuttons — amber when checked ────────────── */
+checkbutton check:checked,
+radiobutton radio:checked,
+check:checked,
+radio:checked {
+    background-color: #d6a241;
+    color: #0e0907;
+}
+
+/* ─── Progress bar — amber fill on surface trough ─────────────────── */
+progressbar trough {
+    background-color: #3f1f13;
+}
+
+progressbar progress {
+    background-color: #d6a241;
+}
+
+/* ─── Scale (sliders) — amber highlight ───────────────────────────── */
+scale trough {
+    background-color: #3f1f13;
+}
+
+scale highlight {
+    background-color: #d6a241;
+}
+
+scale slider {
+    background-color: #e4d7c2;
+}
+
+/* ─── Selection — rows and text ───────────────────────────────────── */
+treeview:selected, treeview.view:selected,
+list row:selected, .view:selected,
+row:selected {
+    background-color: #d6a241;
+    color: #0e0907;
+}
+
+treeview:hover, treeview.view:hover,
+list row:hover, row:hover {
+    background-color: rgba(116, 82, 52, 0.3);
+}
+
+selection, *:selected {
+    background-color: #d6a241;
+    color: #0e0907;
+}
+
+/* ─── Separators — overlay ────────────────────────────────────────── */
+separator {
+    background-color: #745234;
+}
+
+/* ─── Tooltips — surface bg ───────────────────────────────────────── */
+tooltip, tooltip.background, .tooltip {
+    background-color: #3f1f13;
+    color: #e4d7c2;
+    border-color: #745234;
+}
+
+/* ─── Backdrop (unfocused window) — mute text ─────────────────────── */
+window:backdrop, .background:backdrop {
+    color: #b6a285;
+}
+
+/* ─── Tabs — amber underline on active ────────────────────────────── */
+notebook tab:checked {
+    background-color: #3f1f13;
+    color: #e4d7c2;
+    border-bottom: 2px solid #d6a241;
+}
+
+notebook tab {
+    background-color: #0e0907;
+    color: #b6a285;
+}
+
+/* ─── Focus ring — amber ──────────────────────────────────────────── */
+*:focus {
+    outline-color: #d6a241;
 }

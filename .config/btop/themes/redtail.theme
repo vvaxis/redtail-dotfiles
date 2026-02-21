@@ -13,7 +13,7 @@ theme[title]="#e4d7c2"
 theme[hi_fg]="#d6a241"
 
 # Background color of selected items
-theme[selected_bg]="#392214"
+theme[selected_bg]="#3f1f13"
 
 # Foreground color of selected items
 theme[selected_fg]="#d6a241"
@@ -47,7 +47,7 @@ theme[cpu_mid]="#d6a241"
 theme[cpu_end]="#ca4949"
 
 # Mem/Disk free meter
-theme[free_start]="#392214"
+theme[free_start]="#3f1f13"
 theme[free_mid]=""
 theme[free_end]="#79ba58"
 
@@ -67,11 +67,11 @@ theme[used_mid]=""
 theme[used_end]="#ca4949"
 
 # Download graph colors
-theme[download_start]="#392214"
+theme[download_start]="#3f1f13"
 theme[download_mid]="#4fafac"
 theme[download_end]="#7dbfbc"
 
 # Upload graph colors
-theme[upload_start]="#392214"
+theme[upload_start]="#3f1f13"
 theme[upload_mid]="#b166c0"
 theme[upload_end]="#c38cce"

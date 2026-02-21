@@ -107,7 +107,7 @@ overview {
         offset x=0 y=5
         color "#00000050"
     }
-    backdrop-color "#150a04"
+    backdrop-color "#0e0907"
 
 }
 
@@ -198,6 +198,8 @@ window-rule {
     open-floating true
 }
 
+
+
 // Opacidade de janelas inativas
 window-rule {
     match is-active=false
@@ -219,6 +221,7 @@ binds {
     Mod+Escape  { spawn "swaylock"; }                          // Lock
     Mod+B       { spawn "blueman-manager"; }                   // Bluetooth
     Mod+Shift+W { spawn-sh "killall ignis; ignis init &"; }    // Restart ignis
+    Mod+S       { spawn "foot" "-e" "spotify_player"; }              // Spotify
     Mod+D       { spawn "ignis" "toggle-window" "ignis-dashboard"; } // Dashboard
 
     // ── Controle de janelas ─────────────────────────────────────────────

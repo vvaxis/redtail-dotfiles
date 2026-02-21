@@ -10,7 +10,7 @@ This is the ricing workspace for **redtail**, the Arch Linux + Niri desktop envi
 - **Hardware:** Lenovo IdeaPad 3 15ALC6
 - **CPU:** AMD Ryzen 5 5500U (6C/12T, up to 4.0 GHz)
 - **GPU:** AMD Radeon Lucienne (integrated)
-- **RAM:** 6 GB DDR4 (soldered, not upgradeable to 8)
+- **RAM:** 6 GB DDR4 (soldered, not upgradeable to 8) — zram 8 GB (zstd)
 - **Storage:** 256 GB NVMe (SSSTC CL1-4D256)
 - **Display:** 15.6" 1920x1080
 - **WiFi/BT:** RTL8822CU (wpa_supplicant backend)
@@ -48,7 +48,7 @@ João Vítor de Carvalho Almeida, 21, São Paulo. FGV EAESP undergraduate in Pub
 | Notifications | Dunst |
 | Lock screen | swaylock-effects |
 | Wallpaper | swaybg (static) |
-| File manager | Nautilus (GUI), Yazi (TUI) |
+| File manager | Nemo (GUI), Yazi (TUI) |
 | Editor | Micro (TUI), occasionally code in other editors |
 | Browser | Zen Browser |
 | System monitor | btop |
@@ -66,6 +66,7 @@ João Vítor de Carvalho Almeida, 21, São Paulo. FGV EAESP undergraduate in Pub
 | Greeter | greetd + tuigreet |
 | Dotfile management | yadm |
 | AUR helper | yay |
+| Music | spotify-player (Rust TUI, Spotify Connect, MPRIS) |
 | Bar | Ignis (vertical sidebar, replaces Waybar) |
 | Dashboard | Ignis (overlay — toggled via Mod+D) |
 
@@ -114,7 +115,7 @@ All configuration lives under `~/.config/` with standard XDG paths. Key director
 ├── dunst/dunstrc
 ├── foot/foot.ini
 ├── fuzzel/fuzzel.ini
-├── gtk-3.0/gtk.css     # palette CSS variables + direct widget overrides
+├── gtk-3.0/gtk.css     # palette CSS variables (legacy + libadwaita) + widget overrides
 ├── gtk-4.0/
 │   ├── gtk.css         # palette CSS variables
 │   └── settings.ini    # gtk-hint-font-metrics=true
@@ -128,6 +129,9 @@ All configuration lives under `~/.config/` with standard XDG paths. Key director
 │   ├── colorschemes/redtail.micro
 │   └── settings.json
 ├── niri/config.kdl
+├── spotify-player/
+│   ├── app.toml        # layout, playback, cover art, clipboard
+│   └── theme.toml      # redtail palette + component styles
 ├── starship.toml
 ├── swaylock/config
 ├── yazi/theme.toml
@@ -140,6 +144,9 @@ Shell files in `$HOME`:
 - `.zshrc` — minimal, loads grml-zsh-config
 - `.zshrc.local` — PATH, history, aliases, plugins, starship init
 - `.zprofile` — cursor env vars
+
+Desktop entries:
+- `~/.local/share/applications/spotify-player.desktop` — launches `foot -e spotify_player` (for fuzzel detection)
 
 Custom scripts:
 - `~/.local/bin/battery-notify` — battery threshold notifications (20%, 15%, 10%, 5%)
@@ -156,7 +163,7 @@ Custom scripts:
   - `c14784e` — primeiro setup
   - `5d8e05a` — initial redtail dotfiles
 
-**Tracked files** (24 files total): all config files listed above, plus `.zshrc`, `.zshrc.local`, `.zprofile`, and `~/.local/bin/battery-notify`.
+**Tracked files** (52 files total): all config files listed above (including spotify-player, ignis modules/scripts, systemd units), plus `.zshrc`, `.zshrc.local`, `.zprofile`, `~/.local/bin/battery-notify`, and `~/.local/share/applications/spotify-player.desktop`.
 
 When making changes to dotfiles, **do not run yadm commit** unless the user explicitly asks. The user manages commits himself.
 
@@ -174,12 +181,12 @@ Redtail is a warm, dark desktop themed around amber, terracotta, and deep brown 
 
 **Cohesion across every surface.** A rice fails if the palette only lives in small accent elements (a colored border, a bar highlight) while the large surfaces — terminal, browser, file manager — remain default dark gray. Redtail's palette is propagated to 9+ config files. The wallpaper bleeds through transparent terminals and the bar. Every app the user interacts with daily should feel like it belongs to the same environment.
 
-**Transparency as connective tissue.** The single highest-impact change in the rice was `alpha=0.90` on the Foot terminal. The wallpaper's warmth comes through every terminal window, which simultaneously:
+**Transparency as connective tissue.** The single highest-impact change in the rice was terminal alpha. The wallpaper's warmth comes through every terminal window, which simultaneously:
 - Connects the wallpaper to the UI (it stops being a hidden background)
 - Softens the hard edges between app surfaces
 - Makes the brown palette feel organic rather than painted-on
 
-Transparency is used deliberately, not gratuitously: 90% on terminals (readable), 90% on dashboard cards, 93% on fuzzel, 70% on inactive windows (aggressive — the user chose this despite readability tradeoff, do not revert), 10% on dunst. btop uses `theme_background = false` to inherit terminal transparency rather than drawing its own.
+Transparency is used deliberately, not gratuitously: 80% on terminals (`alpha=0.80` in foot — was 0.90, user lowered it), 90% on dashboard cards, 93% on fuzzel, 70% on inactive windows (aggressive — the user chose this despite readability tradeoff, do not revert), 10% on dunst. btop uses `theme_background = false` to inherit terminal transparency rather than drawing its own. spotify-player also inherits terminal transparency (no `background` in its theme palette).
 
 **Minimalism with substance.** The desktop is clean but not empty. The Ignis sidebar provides real system info (CPU, memory, network, battery, Bluetooth state). The Ignis dashboard (Mod+D) overlays calendar, events, weather, notes, and media controls. The lock screen shows time and date inside a clear indicator ring. Nothing is decoration-only — but nothing is ugly or utilitarian either.
 
@@ -187,12 +194,12 @@ Transparency is used deliberately, not gratuitously: 90% on terminals (readable)
 
 ### How It Gets There
 
-**The Redtail Palette v4:**
+**The Redtail Palette v0.5:**
 
 | Role | Hex | Where |
 |---|---|---|
-| Base (background) | `#150a04` | Terminals, dashboard cards, notifications, GTK, editor, launcher, lock screen |
-| Surface (elevated) | `#392214` | Sidebar bg, selections, headerbar, cursor-line, hovered rows, GTK sidebar |
+| Base (background) | `#0e0907` | Terminals, dashboard cards, notifications, GTK content areas, editor, launcher, lock screen |
+| Surface (elevated) | `#3f1f13` | Sidebar bg, selections, headerbar, cursor-line, hovered rows, GTK sidebar, cards, dialogs |
 | Overlay (borders) | `#745234` | Borders, inactive ring, gutter, indent guides, bright-black |
 | Text (cream) | `#e4d7c2` | Primary foreground everywhere |
 | Subtext (muted) | `#b6a285` | Secondary text, inactive, placeholder |
@@ -207,13 +214,15 @@ Transparency is used deliberately, not gratuitously: 90% on terminals (readable)
 | Teal | `#4fafac` | Special tokens, network module |
 | Bright variants | see foot.ini | `#d57070`, `#9dc987`, `#8cb5d8`, `#c38cce`, `#7dbfbc` |
 
-**Palette history:** v1/v2 used `#1a1714` / `#2a2420` / `#3d352e` as dark anchors — read as gray. v3 shifted warmer: `#2a1f14` / `#3b2d1e` / `#4d3b28` — still too desaturated at low brightness, read as cold brown. v4 initially pushed both saturation AND lightness to L=16/25/33%, S=45/42/38% — but the user found base too bright. v4 was then re-tuned: base pushed very dark (`#150a04`, L=5%, S=68% — deep espresso), surface pulled to `#392214` (L=15%, S=50%). Overlay kept at `#745234`. Accent colors kept their bolder saturation from v4: green 25→42%, blue 37→52%, teal 22→38%, lavender 30→42%.
+**Palette history:** v0.1/v0.2 used `#1a1714` / `#2a2420` / `#3d352e` as dark anchors — read as gray. v0.3 shifted warmer: `#2a1f14` / `#3b2d1e` / `#4d3b28` — still too desaturated at low brightness, read as cold brown. v0.4 initially pushed both saturation AND lightness to L=16/25/33%, S=45/42/38% — but the user found base too bright. v0.4 was then re-tuned: base pushed very dark (`#150a04`, L=5%, S=68% — deep espresso), surface pulled to `#392214` (L=15%, S=50%). Overlay kept at `#745234`. Accent colors kept their bolder saturation from v0.4: green 25→42%, blue 37→52%, teal 22→38%, lavender 30→42%.
+
+v0.5 addressed the "sea of brown" problem: all three dark anchors at the same hue/saturation made GTK apps feel monotonously brown. Fix: base desaturated and darkened to near-black (`#0e0907`, L=3%, S=35%) — too dark for hue to register visually, reads as "warm darkness." Surface shifted redder and slightly more saturated (`#3f1f13`, H=16°, S=54%, L=16%) — gives "redtail" character to elevated chrome. Overlay unchanged. The key insight: base covers ~60% of GTK pixels (content area), so desaturating it alone massively reduces perceived brown while keeping surface/overlay intentionally warm. Tested by desaturating surface/overlay instead (lost identity, became "brownish gray") and by adding cool accent colors to structural elements (blue scrollbar, green switches — looked alien on warm surfaces). Both approaches failed. Only the base change worked.
 
 Palette is defined in `~/Projects/ricing/palette.conf` and propagated to all configs via `recolor.sh` (see Recolor System below).
 
 **Niri window management:** 15px gaps, 8px corner radius, no borders (off), focus ring 3px in amber/overlay. Shadows are subtle: softness 20, spread 3, y-offset 5. Spread was reduced from 8 because it caused shadows to merge between adjacent windows ("dark haze" effect). Inactive windows at 70% opacity.
 
-**Key bindings philosophy:** Vim-style (hjkl) alongside arrow keys for all navigation. Mod+Z for terminal (not Mod+Return — Z is closer to the left hand). Mod+Tab for launcher. Mod+A for browser. Single-key launchers for frequently used TUI apps: Mod+G (btop), Mod+Y (yazi). Media/brightness keys work while locked.
+**Key bindings philosophy:** Vim-style (hjkl) alongside arrow keys for all navigation. Mod+Z for terminal (not Mod+Return — Z is closer to the left hand). Mod+Tab for launcher. Mod+A for browser. Single-key launchers for frequently used TUI apps: Mod+G (btop), Mod+Y (yazi), Mod+S (spotify-player). Media/brightness keys work while locked.
 
 ### Known Limitations and Unfinished Work
 
@@ -221,14 +230,16 @@ Palette is defined in `~/Projects/ricing/palette.conf` and propagated to all con
 - **Niri shadow spread > 5:** Causes shadows to merge between adjacent windows. Keep at 3.
 - **micro markdown rendering:** Inline code (backticks) uses the same green as headings — could differentiate. Cursor line highlight is barely visible.
 - **Niri window borders:** Tested with solid and gradient approaches — solid is redundant with focus ring, gradients look bad. Borders stay off.
-- **Zen Browser:** Not themed (browser CSS ricing is its own rabbit hole).
+- **Zen Browser:** Not themed (browser CSS ricing is its own rabbit hole). Note: niri compositor opacity rules (applied to active windows) caused Zen to appear brown via wallpaper bleed-through — even though the window didn't look visually transparent. A rendering quirk. Those rules were reverted.
+- **Libadwaita/GTK4 compositor opacity:** Nautilus and other libadwaita apps ignore niri compositor opacity. GTK4/libadwaita sets `wl_surface.set_opaque_region` on the entire window; Smithay/niri respects this and skips alpha blending. Popup menus (separate subsurfaces) do get transparency. No user-level workaround exists — needs niri upstream feature. Nemo was installed as a GTK3 alternative that works with compositor opacity.
+- **GTK theme:** Rewritten in v0.5 with full `@define-color` coverage (34+ variables in GTK4, 50+ in GTK3) and widget overrides for all interactive states (buttons, entries, scrollbar, switches, checks, progress, selection, hover, focus, tooltips, tabs, backdrop). Headerbar has a 3px amber bottom stripe. Button:checked uses subtle amber tint (not solid fill) to avoid painting toolbars solid yellow.
 - **CSS `spacing` error:** GTK4 CSS parser reports "No property named spacing" on ignis startup. The style.css has NO spacing property — error source is unknown (possibly GTK internals). Cosmetic, doesn't affect rendering.
 
 ### Color Usage — Stripe System
 
 The "color usage overhaul" was the biggest design change in this session. The palette had 8 rich accent colors but they only appeared in tiny elements (icon tints, header text). The solution: **accent-colored stripes** — solid colored left-edge lines that give each element a strong color identity without overwhelming the warm base.
 
-**Dashboard cards:** Each card has a 4px solid left border stripe in its accent color (amber=calendar, blue=events, teal=weather, green=notes, lavender=music) + semi-transparent base background (`alpha(#150a04, 0.90)`). This replaced the barely-visible 2px borders at 45% alpha.
+**Dashboard cards:** Each card has a 4px solid left border stripe in its accent color (amber=calendar, blue=events, teal=weather, green=notes, lavender=music) + semi-transparent base background (`alpha(#0e0907, 0.90)`). This replaced the barely-visible 2px borders at 45% alpha.
 
 **Sidebar modules:** Each module has an `inset box-shadow 3px` left stripe in its accent color (blue=CPU, yellow=RAM, lavender=volume, amber=brightness, teal=network, blue=bluetooth, green=battery). Module `border-radius` is 0 (straight lines — rounded looked chunky). Module values are 14px bold.
 
@@ -290,6 +301,32 @@ Both sidebar and dashboard run in a single Ignis process, sharing one CSS file (
 - GTK4 Vulkan/NGL renderer clips text on AMD iGPUs — use `GSK_RENDERER=cairo` for Ignis
 - GTK4 focus ring on buttons: suppress with `.day-cell:focus-visible { outline: none; }` when custom selection styling exists
 
+### spotify-player
+
+**What it is:** Rust-based Spotify TUI client (`spotify-player` AUR package). Lightweight (~30 MB RSS), supports sixel album art in Foot, Spotify Connect (acts as a device), MPRIS for Ignis dashboard integration, and lyrics display. Requires Spotify Premium.
+
+**Config location:** `~/.config/spotify-player/` — `app.toml` (behavior/layout), `theme.toml` (colors/styles). No custom keymap — user uses default keybindings ("normie keys", not vim).
+
+**Launch:** `Mod+S` in niri (spawns `foot -e spotify_player`). Also available via fuzzel through the `.desktop` file at `~/.local/share/applications/spotify-player.desktop`.
+
+**Theme philosophy:** Uses the full redtail palette with intentional color roles, not "marrom puro" (all-brown). Each color has a semantic function:
+- **Amber** (`bright_yellow` / `BrightYellow`): identity — block titles, table headers
+- **Green**: active state — playback status, current playing, progress bar
+- **Blue**: informational — artist names
+- **Lavender** (`magenta` / `Magenta`): decorative — borders
+- **Red**: emotional — liked tracks
+- **Surface** (`#3f1f13`): elevated — selections, progress bar unfilled
+
+**Key design decisions:**
+- No `background` or `black` in theme palette → inherits Foot terminal transparency (0.80 alpha)
+- `border_type = "Rounded"` — consistent with niri corner radius aesthetic
+- `progress_bar_type = "Line"` — clean, not block-based
+- Cover art at default size (9x5, height 6) — larger sizes created a gap between art and progress bar
+- `enable_notify = false` — dunst handles notifications via MPRIS, no double-notify
+- `sort_artist_albums_by_type = true` — albums/singles/EPs separated
+
+**Not in recolor.sh:** spotify-player theme uses palette hex values directly but is NOT tracked by the recolor system (it uses TOML color name references like `"Green"`, `"Magenta"` mapped to the `[themes.palette]` section, so only the palette block would need updating on color changes).
+
 ### Reference Material
 
 `references/unixporn/` contains ~17 screenshot references from r/unixporn. These are broadly inspirational rather than direct targets. Notable patterns across them:
@@ -329,7 +366,8 @@ foot.ini, dunstrc, fuzzel.ini, niri/config.kdl, gtk-3.0/gtk.css, gtk-4.0/gtk.css
 
 - Configs remain the source of truth for everything except colors. Edit them directly for non-color changes.
 - `palette.conf` stores bare hex without `#`. The `#` prefix, alpha suffixes (`ee`, `ff`, `dd`, `00`), and quoting are part of each config's own syntax and are not touched by the script.
-- Non-palette colors (`#00001a`/`#00000050` shadows in niri, `00000000` separator in swaylock) are not in palette.conf and are never touched. The old non-palette `#322818` GTK sidebar color was replaced with `#392214` (surface) and is now tracked.
+- Non-palette colors (`#00001a`/`#00000050` shadows in niri, `00000000` separator in swaylock) are not in palette.conf and are never touched.
+- `rgba()` values in GTK CSS files use RGB components of the base color (e.g., `rgba(14, 9, 7, 0.36)` for `#0e0907`). These are NOT updated by `recolor.sh` and require manual adjustment if the base changes.
 - yadm tracks both the generated configs at `~/.config/` and the recolor system itself (`palette.conf`, `.palette.current`, `recolor.sh`).
 
 ---
@@ -349,12 +387,31 @@ foot.ini, dunstrc, fuzzel.ini, niri/config.kdl, gtk-3.0/gtk.css, gtk-4.0/gtk.css
 9. **Ignis CSS reloads instantly.** No need to restart ignis for CSS-only changes. Only restart for Python module changes.
 10. **grml overrides starship.** The `prompt off` line in `.zshrc.local` before `eval "$(starship init zsh)"` is required. Don't remove it.
 
-### Palette Quick Reference (v4)
+### Palette Quick Reference (v0.5)
 
 ```
-Base       #150a04    Surface    #392214    Overlay    #745234
+Base       #0e0907    Surface    #3f1f13    Overlay    #745234
 Text       #e4d7c2    Subtext    #b6a285    Muted      #6c5745
 Amber      #d6a241    Yellow     #e1b65a    Terracotta #cb5e3d
 Green      #79ba58    Red        #ca4949    Blue       #639cce
 Lavender   #b166c0    Teal       #4fafac
 ```
+
+---
+
+## Pending Tasks
+
+### GTK Theme Rethink — DONE (v0.5)
+
+Rewritten with full variable coverage and widget overrides. The "sea of brown" was solved by palette v0.5: near-black base for content areas, warm red-brown surface for chrome. Both GTK3 and GTK4 files now have 34+ `@define-color` variables (including all shade, scrollbar, destructive, headerbar variables that libadwaita reads) and interactive widget overrides (buttons, entries, scrollbar, switches, checks, progress, selection, hover, focus, tooltips, tabs, backdrop).
+
+Remaining notes:
+- Zen Browser (GTK3) proved resistant to `gtk-3.0/gtk.css` changes — may need separate approach.
+- libadwaita apps respect `@define-color` variables but not direct widget overrides — the variables alone cover most visual needs.
+
+### GTK App Transparency
+
+Compositor-level transparency (`opacity` in niri window-rules) does not work for libadwaita/GTK4 apps because they set `wl_surface.set_opaque_region`. This is a niri/Smithay limitation — no user-level workaround exists. Options:
+- Wait for niri upstream to add an "ignore opaque region" window rule
+- Accept that GTK4 apps won't have transparency (Nemo works fine as GTK3 alternative to Nautilus)
+- For active-window compositor opacity: **do not re-add** — it caused text to become transparent on all apps (including terminals) and a rendering quirk on Zen Browser

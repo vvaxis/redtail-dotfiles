@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Spotify
+Comment=Spotify TUI client
+Exec=foot -e spotify_player
+Icon=spotify
+Terminal=false
+Type=Application
+Categories=Audio;Music;Player;
+Keywords=music;spotify;player;

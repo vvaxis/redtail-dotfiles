@@ -27,26 +27,26 @@ indicator-radius=160
 indicator-thickness=10
 
 # Estados do anel
-inside-color=150a0400
+inside-color=0e090700
 ring-color=745234dd
 
 # Digitando
-inside-clear-color=150a0400
+inside-clear-color=0e090700
 ring-clear-color=d6a241dd
 text-clear-color=e4d7c2ff
 
 # Verificando
-inside-ver-color=150a0400
+inside-ver-color=0e090700
 ring-ver-color=d6a241dd
 text-ver-color=e4d7c2ff
 
 # Errado
-inside-wrong-color=150a0400
+inside-wrong-color=0e090700
 ring-wrong-color=ca4949dd
 text-wrong-color=ca4949ff
 
 # Caps lock ativo
-inside-caps-lock-color=150a0400
+inside-caps-lock-color=0e090700
 ring-caps-lock-color=e1b65add
 text-caps-lock-color=e1b65aff
 

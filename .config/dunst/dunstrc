@@ -68,7 +68,7 @@
 
 # ── Urgência: baixa (informação, confirmações) ───────────────────────────
 [urgency_low]
-    background = "#150a04"
+    background = "#0e0907"
     foreground = "#b6a285"
     frame_color = "#79ba58"
     highlight = "#79ba58"
@@ -76,7 +76,7 @@
 
 # ── Urgência: normal (notificações padrão) ───────────────────────────────
 [urgency_normal]
-    background = "#150a04"
+    background = "#0e0907"
     foreground = "#e4d7c2"
     frame_color = "#d6a241"
     highlight = "#d6a241"
@@ -84,7 +84,7 @@
 
 # ── Urgência: crítica (alertas importantes) ──────────────────────────────
 [urgency_critical]
-    background = "#392214"
+    background = "#3f1f13"
     foreground = "#e4d7c2"
     frame_color = "#ca4949"
     highlight = "#ca4949"
