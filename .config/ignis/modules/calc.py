@@ -16,8 +16,8 @@ def calc_button() -> Widget.Button:
         ])
 
     return Widget.Button(
-        child=Widget.Label(label="󰃬", css_classes=["module-icon", "calc-icon"]),
         css_classes=["calc-button"],
         on_click=on_click,
+        child=Widget.Icon(image="accessories-calculator-symbolic", pixel_size=18, css_classes=["calc-icon"], halign="center"),
         tooltip_text="Calculator",
     )
