@@ -25,8 +25,6 @@ FILES=(
     "$HOME/.config/btop/themes/redtail.theme"
     "$HOME/.zshrc.local"
     "$HOME/.config/ignis/style.css"
-    "$HOME/.config/zen/8tu4dx6e.Default (release)/chrome/userChrome.css"
-    "$HOME/.config/zen/8tu4dx6e.Default (release)/chrome/userContent.css"
 )
 
 # Convert 6-char hex to "R, G, B" decimal string

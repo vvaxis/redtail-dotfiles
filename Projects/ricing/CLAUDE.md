@@ -19,7 +19,7 @@ This is the ricing workspace for **redtail**, the Arch Linux + Niri desktop envi
 
 This is a daily-carry college notebook. It reads PDFs and articles, writes text (Google Docs, .txt, occasionally .docx), codes occasionally, and sometimes runs games. RAM is tight at 6 GB — keep this in mind when suggesting daemons or heavy processes.
 
-**Display density note:** 15.6" at 1080p is dense — UI text is physically small. Font sizes across configs should be **14px minimum**, ideally larger where aesthetically appropriate. Don't default to 11-12px for any user-facing text.
+**Display density note:** 15.6" at 1080p is dense — UI text is physically small. Font sizes for UI chrome (bars, launchers, notifications) should be **14px minimum**. Terminal font (foot) is 12pt with `dpi-aware=yes`.
 
 ## The User
 
@@ -66,7 +66,12 @@ João Vítor de Carvalho Almeida, 21, São Paulo. FGV EAESP undergraduate in Pub
 | Greeter | greetd + tuigreet |
 | Dotfile management | yadm |
 | AUR helper | yay |
+| Media controls | playerctl (MPRIS CLI) |
 | Music | spotify-player (Rust TUI, Spotify Connect, MPRIS) |
+| Fetch | fastfetch |
+| Office | OnlyOffice |
+| Alt browser | LibreWolf |
+| Printing | CUPS |
 | Bar | Ignis (vertical sidebar, replaces Waybar) |
 | Dashboard | Ignis (overlay — toggled via Mod+D) |
 
@@ -78,24 +83,24 @@ João Vítor de Carvalho Almeida, 21, São Paulo. FGV EAESP undergraduate in Pub
 
 ### Cursor & Icons
 
-- **Cursor:** phinger-cursors-dark, size 24 (set in `.zprofile` and niri gsettings)
+- **Cursor:** phinger-cursors-dark, size 24 (set in `.zprofile` and niri `environment` block)
 - **Icons:** Papirus-Dark
 - **GTK theme:** adw-gtk-theme (Adwaita dark, overridden by GTK CSS)
 
 ### Security
 
 - **Firewall:** ufw (deny incoming, allow outgoing)
-- **DNS:** DNS-over-TLS via systemd-resolved, primary Quad9 (`9.9.9.9`, `149.112.112.112`), fallback Cloudflare + Google
+- **DNS:** DNS-over-TLS (opportunistic) via systemd-resolved, DNSSEC=allow-downgrade, primary Quad9 (`9.9.9.9`, `149.112.112.112`), fallback Cloudflare + Google (system defaults)
 
 ### AUR Packages
 
-bibata-cursor-theme-bin, networkmanager-dmenu-git, phinger-cursors, pwvucontrol, swaylock-effects, yay, zen-browser-bin
+bibata-cursor-theme-bin, ignis-gvc, ignis-gvc-debug, librewolf-bin, libwireplumber-4.0-compat, networkmanager-dmenu-git, onlyoffice-bin, phinger-cursors, pwvucontrol, python-ignis-git, swaylock-effects, ttf-ms-fonts, yay, zen-browser-bin
 
 ### System Services (enabled)
 
-**System-level:** bluetooth, greetd, NetworkManager, systemd-resolved, ufw
+**System-level:** bluetooth, cups, greetd, NetworkManager, NetworkManager-dispatcher, systemd-resolved, systemd-timesyncd, ufw, fstrim.timer
 
-**User-level:** wireplumber, pipewire, pipewire-pulse, battery-notify.timer
+**User-level:** wireplumber, pipewire.socket, pipewire-pulse.socket (socket-activated), battery-notify.timer
 
 ### Not Yet Installed (anticipated)
 
@@ -122,9 +127,12 @@ All configuration lives under `~/.config/` with standard XDG paths. Key director
 ├── ignis/
 │   ├── config.py       # sidebar + dashboard window definitions
 │   ├── style.css       # shared CSS for sidebar + dashboard
-│   ├── modules/        # sidebar modules (power, clock, volume, etc.)
+│   ├── modules/        # sidebar: power, clock, volume, brightness, network, bluetooth, battery, system, workspaces
 │   ├── modules/dashboard/  # dashboard cards (calendar, events, weather, notes, music)
 │   └── scripts/        # weather.py, gcal-events.py, .venv/, requirements.txt
+├── mimeapps.list       # default apps (Zen=web, Zathura=PDF)
+├── networkmanager-dmenu/
+│   └── config.ini      # networkmanager-dmenu fuzzel integration
 ├── micro/
 │   ├── colorschemes/redtail.micro
 │   └── settings.json
@@ -142,8 +150,8 @@ All configuration lives under `~/.config/` with standard XDG paths. Key director
 
 Shell files in `$HOME`:
 - `.zshrc` — minimal, loads grml-zsh-config
-- `.zshrc.local` — PATH, history, aliases, plugins, starship init
-- `.zprofile` — cursor env vars
+- `.zshrc.local` — history, aliases (y, bt, ff, cat, ls), plugins (zsh-autosuggestions, zsh-syntax-highlighting), starship init
+- `.zprofile` — PATH (`~/.local/bin`), cursor env vars (XCURSOR_THEME, XCURSOR_SIZE)
 
 Desktop entries:
 - `~/.local/share/applications/spotify-player.desktop` — launches `foot -e spotify_player` (for fuzzel detection)
@@ -163,7 +171,7 @@ Custom scripts:
   - `c14784e` — primeiro setup
   - `5d8e05a` — initial redtail dotfiles
 
-**Tracked files** (52 files total): all config files listed above (including spotify-player, ignis modules/scripts, systemd units), plus `.zshrc`, `.zshrc.local`, `.zprofile`, `~/.local/bin/battery-notify`, and `~/.local/share/applications/spotify-player.desktop`.
+**Tracked files** (53 files total): all config files listed above (including spotify-player, ignis modules/scripts, systemd units, mimeapps.list, networkmanager-dmenu), plus `.zshrc`, `.zshrc.local`, `.zprofile`, `~/.local/bin/battery-notify`, `~/.local/share/applications/spotify-player.desktop`, and `~/Imagens/wallpapers/redtail.jpg`.
 
 When making changes to dotfiles, **do not run yadm commit** unless the user explicitly asks. The user manages commits himself.
 
@@ -190,7 +198,7 @@ Transparency is used deliberately, not gratuitously: 75% on terminals (`alpha=0.
 
 **Minimalism with substance.** The desktop is clean but not empty. The Ignis sidebar provides real system info (CPU, memory, network, battery, Bluetooth state). The Ignis dashboard (Mod+D) overlays calendar, events, weather, notes, and media controls. The lock screen shows time and date inside a clear indicator ring. Nothing is decoration-only — but nothing is ugly or utilitarian either.
 
-**Personality without gimmicks.** The aesthetic leans melancholic-warm. The wallpaper sets the mood: urban, contemplative, golden hour. The accent color is amber (#d4a243), not neon. The prompt arrow is `▸`, not a spaceship. The font is Iosevka — narrow, technical, no-nonsense. There are no rounded floating bars, no blur-everything compositing effects, no anime waifus. The rice has a clear visual voice without being loud.
+**Personality without gimmicks.** The aesthetic leans melancholic-warm. The wallpaper sets the mood: urban, contemplative, golden hour. The accent color is amber (#d6a241), not neon. The prompt arrow is `▸`, not a spaceship. The font is Iosevka — narrow, technical, no-nonsense. There are no rounded floating bars, no blur-everything compositing effects, no anime waifus. The rice has a clear visual voice without being loud.
 
 ### How It Gets There
 
@@ -212,6 +220,7 @@ Transparency is used deliberately, not gratuitously: 75% on terminals (`alpha=0.
 | Blue | `#639cce` | PDFs, underlined, CPU module, Bluetooth |
 | Lavender | `#b166c0` | Constants, images, WirePlumber module |
 | Teal | `#4fafac` | Special tokens, network module |
+| Dim white | `#cbbaa3` | Foot regular white (regular7) |
 | Bright variants | see foot.ini | `#d57070`, `#9dc987`, `#8cb5d8`, `#c38cce`, `#7dbfbc` |
 
 **Palette history:** v0.1/v0.2 used `#1a1714` / `#2a2420` / `#3d352e` as dark anchors — read as gray. v0.3 shifted warmer: `#2a1f14` / `#3b2d1e` / `#4d3b28` — still too desaturated at low brightness, read as cold brown. v0.4 initially pushed both saturation AND lightness to L=16/25/33%, S=45/42/38% — but the user found base too bright. v0.4 was then re-tuned: base pushed very dark (`#150a04`, L=5%, S=68% — deep espresso), surface pulled to `#392214` (L=15%, S=50%). Overlay kept at `#745234`. Accent colors kept their bolder saturation from v0.4: green 25→42%, blue 37→52%, teal 22→38%, lavender 30→42%.
@@ -220,11 +229,11 @@ v0.5 addressed the "sea of brown" problem: all three dark anchors at the same hu
 
 Palette is defined in `~/Projects/ricing/palette.conf` and propagated to all configs via `recolor.sh` (see Recolor System below).
 
-**Niri window management:** 15px gaps, 8px corner radius, no borders (off), focus ring 3px in amber/overlay. Shadows are subtle: softness 20, spread 3, y-offset 5. Spread was reduced from 8 because it caused shadows to merge between adjacent windows ("dark haze" effect). Inactive windows at 90% opacity (compositor dim — subtle darkening without revealing wallpaper on opaque apps).
+**Niri window management:** 15px gaps, 8px corner radius, no borders (off), focus ring 3px in amber/overlay. Default column width 0.5 (half screen). Shadows are subtle: softness 20, spread 3, y-offset 5. Spread was reduced from 8 because it caused shadows to merge between adjacent windows ("dark haze" effect). Inactive windows at 90% opacity (compositor dim — subtle darkening without revealing wallpaper on opaque apps). Struts 15px left/right. Tab indicator on top (amber active, overlay inactive), place-within-column, hide-when-single-tab. Foot windows open tabbed by default. Hot corner top-right triggers overview. Overview zoom 0.6.
 
-**Key bindings philosophy:** Vim-style (hjkl) alongside arrow keys for all navigation. Mod+Z for terminal (not Mod+Return — Z is closer to the left hand). Mod+Tab for launcher. Mod+A for browser. Single-key launchers for frequently used TUI apps: Mod+G (btop), Mod+Y (yazi), Mod+S (spotify-player). Mod+Shift+C opens niri config in $EDITOR. Media/brightness keys work while locked.
+**Key bindings philosophy:** Vim-style (hjkl) alongside arrow keys for all navigation. Mod+Z for terminal (not Mod+Return — Z is closer to the left hand). Mod+Tab for launcher. Mod+A for browser. Single-key launchers for frequently used TUI apps: Mod+G (btop), Mod+Y (yazi), Mod+S (spotify-player). Mod+E for file manager. Mod+B for Blueman. Mod+Escape for swaylock. Mod+O for overview. Mod+W toggles tabbed display. Mod+D for dashboard. Mod+N / Mod+Shift+N for dunst history-pop / close-all. Mod+Shift+C opens niri config in $EDITOR. Mod+Shift+W restarts Ignis. Media/brightness keys work while locked (playerctl for media, brightnessctl for backlight).
 
-**Niri environment variables:** Daily-driver programs are referenced via shell variables in `spawn-sh` commands, defined in niri's `environment` block: `TERMINAL` (foot), `BROWSER` (zen-browser), `FILE_MANAGER` (nemo), `EDITOR` (micro). Changing a single variable updates all keybindings that use it. Programs unlikely to be swapped (fuzzel, swaylock, blueman, ignis) use `spawn` directly.
+**Niri environment variables:** Daily-driver programs are referenced via shell variables in `spawn-sh` commands, defined in niri's `environment` block: `TERMINAL` (foot), `BROWSER` (zen-browser), `FILE_MANAGER` (nemo), `EDITOR` (micro), plus `XCURSOR_THEME` and `XCURSOR_SIZE` (duplicated from `.zprofile` for compositor awareness). Changing a single variable updates all keybindings that use it. Programs unlikely to be swapped (fuzzel, swaylock, blueman, ignis) use `spawn` directly.
 
 ### Known Limitations and Unfinished Work
 
@@ -265,7 +274,7 @@ The "color usage overhaul" was the biggest design change in this session. The pa
 
 ### Ignis Dashboard
 
-Both sidebar and dashboard run in a single Ignis process, sharing one CSS file (`~/.config/ignis/style.css`). The dashboard is toggled via `Mod+D` which runs `ignis toggle-window ignis-dashboard`. EWW has been fully removed — all scripts now live in `~/.config/ignis/scripts/`.
+Both sidebar and dashboard run in a single Ignis process, sharing one CSS file (`~/.config/ignis/style.css`). The dashboard is toggled via `Mod+D` which runs `ignis toggle-window ignis-dashboard`. All scripts now live in `~/.config/ignis/scripts/`.
 
 **Dashboard window:** Non-anchored overlay layer (no full-screen backdrop). The window sizes to its content and floats centered — clicks outside the cards pass through to windows below. Keyboard events are handled via a `Gtk.EventControllerKey` on the window. Escape closes the dashboard.
 
@@ -305,7 +314,7 @@ Both sidebar and dashboard run in a single Ignis process, sharing one CSS file (
 
 ### spotify-player
 
-**What it is:** Rust-based Spotify TUI client (`spotify-player` AUR package). Lightweight (~30 MB RSS), supports sixel album art in Foot, Spotify Connect (acts as a device), MPRIS for Ignis dashboard integration, and lyrics display. Requires Spotify Premium.
+**What it is:** Rust-based Spotify TUI client (`spotify-player`, `extra` repo). Lightweight (~30 MB RSS), supports sixel album art in Foot, Spotify Connect (acts as a device), MPRIS for Ignis dashboard integration, and lyrics display. Requires Spotify Premium.
 
 **Config location:** `~/.config/spotify-player/` — `app.toml` (behavior/layout), `theme.toml` (colors/styles). No custom keymap — user uses default keybindings ("normie keys", not vim).
 
@@ -336,13 +345,13 @@ Both sidebar and dashboard run in a single Ignis process, sharing one CSS file (
 - Niri-specific setups showing scrollable tiling with eww overlays and vertical bars
 - Brazilian rices with earthy terracotta tones and ASCII art
 
-`guides/` exists but is currently empty.
+`guides/` contains reference guides (EWW+Niri technical guide, Linux shell/widget frameworks guide in Portuguese).
 
 `CONVERSATION_CONTEXT.md` contains a full recap of all previous Claude Code sessions — bug fixes, audit, ZSH setup, and the entire ricing process with rationale for every decision.
 
 ## Recolor System
 
-Palette colors are defined once in `~/Projects/ricing/palette.conf` and propagated to all 13 color-bearing config files via in-place sed replacement.
+Palette colors are defined once in `~/Projects/ricing/palette.conf` and propagated to all 13 color-bearing config files via in-place sed replacement. The script also handles `rgba()`/`rgb()` decimal RGB values (e.g., `rgba(14, 9, 7, 0.36)`) by matching the `(R, G, B` pattern — these are updated automatically when the corresponding hex color changes.
 
 ### Files
 
@@ -355,7 +364,7 @@ Palette colors are defined once in `~/Projects/ricing/palette.conf` and propagat
 
 ### How it works
 
-1. Edit a color in `palette.conf` (e.g., `amber=d4a243` → `amber=e0a030`)
+1. Edit a color in `palette.conf` (e.g., `amber=d6a241` → `amber=e0a030`)
 2. Run `./recolor.sh`
 3. The script compares `palette.conf` against `.palette.current`, finds changed values, and does a two-pass sed replacement (old hex → temporary token → new hex) to avoid cascading when colors swap values
 4. All 13 config files are updated in-place, `.palette.current` is updated
@@ -369,7 +378,7 @@ foot.ini, dunstrc, fuzzel.ini, niri/config.kdl, gtk-3.0/gtk.css, gtk-4.0/gtk.css
 - Configs remain the source of truth for everything except colors. Edit them directly for non-color changes.
 - `palette.conf` stores bare hex without `#`. The `#` prefix, alpha suffixes (`ee`, `ff`, `dd`, `00`), and quoting are part of each config's own syntax and are not touched by the script.
 - Non-palette colors (`#00001a`/`#00000050` shadows in niri, `00000000` separator in swaylock) are not in palette.conf and are never touched.
-- `rgba()` values in GTK CSS files use RGB components of the base color (e.g., `rgba(14, 9, 7, 0.36)` for `#0e0907`). These are NOT updated by `recolor.sh` and require manual adjustment if the base changes.
+- `rgba()` values in GTK CSS files use RGB components of palette colors (e.g., `rgba(14, 9, 7, 0.36)` for `#0e0907`). These ARE updated by `recolor.sh` via `(R, G, B` pattern matching. The alpha component (e.g., `0.36`) is not touched.
 - yadm tracks both the generated configs at `~/.config/` and the recolor system itself (`palette.conf`, `.palette.current`, `recolor.sh`).
 
 ---
@@ -382,7 +391,7 @@ foot.ini, dunstrc, fuzzel.ini, niri/config.kdl, gtk-3.0/gtk.css, gtk-4.0/gtk.css
 2. **Check dependencies before removing packages.** Always run `pactree -r <pkg>` first.
 3. **Don't commit.** The user manages yadm commits himself. Only commit if explicitly asked.
 4. **Don't revert user choices.** Inactive window opacity at 0.90, foot alpha at 0.75, GTK3 rgba backgrounds — all intentional. phinger-cursors-dark is the cursor. `add_newline = false` in starship is deliberate. If a setting seems aggressive, it was probably discussed and chosen.
-5. **Palette changes go through recolor.sh.** Edit `palette.conf`, run `./recolor.sh`. Do not manually edit hex values across configs — the script handles all 13 files. See Recolor System below.
+5. **Palette changes go through recolor.sh.** Edit `palette.conf`, run `./recolor.sh`. Do not manually edit hex values across configs — the script handles all 13 files (including rgba() decimals). See Recolor System below.
 6. **Perception over theory.** If the user says a color looks gray, it's gray. Don't argue that it's "technically warm" by hex value.
 7. **RAM awareness.** The machine has 6 GB. Don't suggest always-on daemons or memory-heavy tools without accounting for this.
 8. **Test shadows conservatively.** Niri shadow spread should not exceed 5.
@@ -394,9 +403,9 @@ foot.ini, dunstrc, fuzzel.ini, niri/config.kdl, gtk-3.0/gtk.css, gtk-4.0/gtk.css
 ```
 Base       #0e0907    Surface    #3f1f13    Overlay    #745234
 Text       #e4d7c2    Subtext    #b6a285    Muted      #6c5745
-Amber      #d6a241    Yellow     #e1b65a    Terracotta #cb5e3d
-Green      #79ba58    Red        #ca4949    Blue       #639cce
-Lavender   #b166c0    Teal       #4fafac
+Dim white  #cbbaa3    Amber      #d6a241    Yellow     #e1b65a
+Terracotta #cb5e3d    Green      #79ba58    Red        #ca4949
+Blue       #639cce    Lavender   #b166c0    Teal       #4fafac
 ```
 
 ---
