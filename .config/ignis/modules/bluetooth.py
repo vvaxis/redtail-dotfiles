@@ -68,6 +68,9 @@ def bluetooth() -> Widget.EventBox:
         return True
 
     def on_click(_box):
+        subprocess.Popen(["fuzzel-bluetooth"])
+
+    def on_right_click(_box):
         subprocess.Popen(["blueman-manager"])
 
     box = Widget.EventBox(
@@ -75,6 +78,7 @@ def bluetooth() -> Widget.EventBox:
         css_classes=["module", "bluetooth"],
         child=[icon, state_label],
         on_click=on_click,
+        on_right_click=on_right_click,
     )
 
     update()

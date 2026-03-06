@@ -94,7 +94,7 @@ João Vítor de Carvalho Almeida, 21, São Paulo. FGV EAESP undergraduate in Pub
 
 ### AUR Packages
 
-bibata-cursor-theme-bin, ignis-gvc, ignis-gvc-debug, librewolf-bin, libwireplumber-4.0-compat, networkmanager-dmenu-git, onlyoffice-bin, phinger-cursors, pwvucontrol, python-ignis-git, swaylock-effects, ttf-ms-fonts, yay, zen-browser-bin
+bibata-cursor-theme-bin, ignis-gvc, ignis-gvc-debug, librewolf-bin, libwireplumber-4.0-compat, networkmanager-dmenu-git, onlyoffice-bin, phinger-cursors, pwvucontrol, python-ignis-git, rofi-bluetooth-git, swaylock-effects, ttf-ms-fonts, yay, zen-browser-bin
 
 ### System Services (enabled)
 
@@ -127,7 +127,7 @@ All configuration lives under `~/.config/` with standard XDG paths. Key director
 ├── ignis/
 │   ├── config.py       # sidebar + dashboard window definitions
 │   ├── style.css       # shared CSS for sidebar + dashboard
-│   ├── modules/        # sidebar: power, clock, volume, brightness, network, bluetooth, battery, system, workspaces
+│   ├── modules/        # sidebar: power, calc, clock, volume, brightness, network, bluetooth, battery, system, workspaces
 │   ├── modules/dashboard/  # dashboard cards (calendar, events, weather, notes, music)
 │   └── scripts/        # weather.py, gcal-events.py, .venv/, requirements.txt
 ├── mimeapps.list       # default apps (Zen=web, Zathura=PDF)
@@ -158,6 +158,7 @@ Desktop entries:
 
 Custom scripts:
 - `~/.local/bin/battery-notify` — battery threshold notifications (20%, 15%, 10%, 5%)
+- `~/.local/bin/fuzzel-bluetooth` — rofi-bluetooth wrapper using fuzzel (creates temp "rofi" shim that redirects to fuzzel --dmenu)
 
 **Backup directories** (`.bak` suffix) exist for dunst, foot, fuzzel, niri, swaylock, waybar — these are pre-rice originals. Don't touch them.
 
@@ -294,8 +295,10 @@ Both sidebar and dashboard run in a single Ignis process, sharing one CSS file (
 
 **Sidebar interactivity:**
 - Volume module: right-click opens pwvucontrol
-- CPU/RAM modules: click opens btop in foot terminal
+- CPU/RAM modules: click opens btop in foot terminal (app-id=btop, window-rule 0.7 width)
 - Network/Bluetooth modules: show "on"/"off" labels below icons, colored per module accent (teal/blue when on, muted when off)
+- Bluetooth module: click opens fuzzel-bluetooth (rofi-bluetooth via fuzzel shim), right-click opens blueman-manager
+- Calculator button: below workspaces, click opens fuzzel calculator (bc backend), result copied to clipboard + dunst notification
 
 **GTK4 renderer fix:** GTK4 4.20+ defaults to Vulkan on Wayland, which causes text clipping artifacts with Iosevka Nerd Font on AMD Radeon Lucienne (fractional pixel glyph positioning). Fix: Ignis is spawned with `GSK_RENDERER=cairo` in niri config. Additionally, `gtk-hint-font-metrics=true` is set in `~/.config/gtk-4.0/settings.ini`.
 

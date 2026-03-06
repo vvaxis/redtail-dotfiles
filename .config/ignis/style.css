@@ -48,6 +48,30 @@
     color: #ca4949;
 }
 
+/* ─── Calculator ──────────────────────────────────────────────────────── */
+.calc-button {
+    min-width: 30px;
+    min-height: 30px;
+    border-radius: 6px;
+    margin: 2px 5px;
+    background-color: transparent;
+    transition: background-color 200ms ease-in-out;
+}
+
+.calc-button:hover {
+    background-color: alpha(#d6a241, 0.2);
+}
+
+.calc-icon {
+    color: #b6a285;
+    font-size: 14px;
+    transition: color 200ms ease-in-out;
+}
+
+.calc-button:hover .calc-icon {
+    color: #d6a241;
+}
+
 /* ─── Workspaces ──────────────────────────────────────────────────────── */
 .workspaces {
     padding: 4px 0;
@@ -179,7 +203,7 @@
 .bluetooth-value          { color: #639cce; }
 .bluetooth-value.off      { color: #6c5745; }
 .battery         { box-shadow: inset 3px 0 0 0 #79ba58; }
-.battery-icon    { color: #79ba58; }
+.battery-icon    { color: #79ba58; font-size: 20px; }
 .battery-value   { color: #79ba58; }
 .battery-value.critical { color: #ca4949; }
 .battery-value.low      { color: #cb5e3d; }

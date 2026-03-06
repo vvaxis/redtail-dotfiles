@@ -4,7 +4,7 @@ import subprocess
 
 
 def _open_btop(_box):
-    subprocess.Popen(["foot", "-e", "btop"])
+    subprocess.Popen(["foot", "--app-id=btop", "-e", "btop"])
 
 
 def system_indicators() -> Widget.Box:

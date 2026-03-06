@@ -2,11 +2,27 @@ from ignis.widgets import Widget
 
 
 def _battery_icon(percent: float, charging: bool) -> str:
-    level = round(percent / 10) * 10
-    level = max(0, min(100, level))
     if charging:
-        return f"battery-level-{level}-charging-symbolic"
-    return f"battery-level-{level}-symbolic"
+        return "󰂄"
+    if percent >= 90:
+        return "󰁹"
+    if percent >= 80:
+        return "󰂂"
+    if percent >= 70:
+        return "󰂁"
+    if percent >= 60:
+        return "󰂀"
+    if percent >= 50:
+        return "󰁿"
+    if percent >= 40:
+        return "󰁾"
+    if percent >= 30:
+        return "󰁽"
+    if percent >= 20:
+        return "󰁼"
+    if percent >= 10:
+        return "󰁻"
+    return "󰂎"
 
 
 def battery() -> Widget.Box:
@@ -16,15 +32,14 @@ def battery() -> Widget.Box:
         return Widget.Box(
             vertical=True,
             css_classes=["module", "battery"],
-            child=[Widget.Icon(image="battery-level-0-symbolic", pixel_size=20, css_classes=["module-icon", "battery-icon"], halign="center")],
+            child=[Widget.Label(label="󰂎", css_classes=["module-icon", "battery-icon"], halign="center")],
         )
 
     upower = UPowerService.get_default()
     device = upower.display_device
 
-    icon = Widget.Icon(
-        image=_battery_icon(device.percent, device.charging),
-        pixel_size=20,
+    icon = Widget.Label(
+        label=_battery_icon(device.percent, device.charging),
         css_classes=["module-icon", "battery-icon"],
         halign="center",
     )
@@ -46,7 +61,7 @@ def battery() -> Widget.Box:
     def update(*_args):
         percent = device.percent
         charging = device.charging
-        icon.image = _battery_icon(percent, charging)
+        icon.set_label(_battery_icon(percent, charging))
         value_label.set_label(str(round(percent)))
 
         classes = ["module-value", "battery-value"]

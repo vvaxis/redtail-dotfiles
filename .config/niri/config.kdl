@@ -92,6 +92,12 @@ window-rule {
     default-column-display "tabbed"
 }
 
+// btop: precisa de terminal grande
+window-rule {
+    match app-id="^btop$"
+    default-column-width { proportion 0.7; }
+}
+
 // ─── GESTURES ───────────────────────────────────────────────────────────────
 gestures {
     hot-corners {
@@ -216,7 +222,7 @@ binds {
     Mod+TAB     { spawn "fuzzel"; }                            // Launcher
     Mod+A       { spawn-sh "$BROWSER"; }                       // Browser
     Mod+E       { spawn-sh "$FILE_MANAGER"; }                  // File manager
-    Mod+G       { spawn-sh "$TERMINAL -e btop"; }              // System monitor
+    Mod+G       { spawn-sh "$TERMINAL --app-id=btop -e btop"; } // System monitor
     Mod+Y       { spawn-sh "$TERMINAL -e yazi"; }              // File manager (terminal)
     Mod+Shift+C { spawn-sh "$TERMINAL -e $EDITOR /home/vvaxis/.config/niri/config.kdl"; } // Niri config
     Mod+N       { spawn-sh "dunstctl history-pop"; }           // Recall última notificação

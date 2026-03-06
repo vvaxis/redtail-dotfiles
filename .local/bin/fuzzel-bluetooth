@@ -1,0 +1,19 @@
+#!/bin/bash
+# rofi-bluetooth via fuzzel: cria um shim "rofi" temporário que redireciona pro fuzzel
+SHIM_DIR=$(mktemp -d)
+trap 'rm -rf "$SHIM_DIR"' EXIT
+
+cat > "$SHIM_DIR/rofi" << 'SHIM'
+#!/bin/bash
+prompt="Bluetooth"
+for arg in "$@"; do
+    case "$prev" in
+        -p) prompt="$arg" ;;
+    esac
+    prev="$arg"
+done
+exec fuzzel --dmenu --prompt="$prompt: "
+SHIM
+chmod +x "$SHIM_DIR/rofi"
+
+PATH="$SHIM_DIR:$PATH" rofi-bluetooth

@@ -5,6 +5,7 @@ from ignis.css_manager import CssInfoPath, CssManager
 from modules import (
     power_button,
     workspaces,
+    calc_button,
     clock,
     system_indicators,
     volume,
@@ -31,6 +32,8 @@ top = Widget.Box(
         power_button(),
         Widget.Separator(css_classes=["section-sep"]),
         workspaces(),
+        Widget.Separator(css_classes=["section-sep"]),
+        calc_button(),
     ],
 )
 

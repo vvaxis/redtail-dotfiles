@@ -7,4 +7,5 @@ from .brightness import brightness
 from .network import network
 from .bluetooth import bluetooth
 from .power import power_button
+from .calc import calc_button
 from .dashboard import dashboard_window
