@@ -47,7 +47,7 @@ layout {
         proportion 0.66667
     }
 
-    default-column-width { proportion 0.5; }
+    default-column-width { proportion 1.0; }
 
     // Focus ring — âmbar quente (acento primário redtail)
     focus-ring {
@@ -95,7 +95,7 @@ window-rule {
 // ─── GESTURES ───────────────────────────────────────────────────────────────
 gestures {
     hot-corners {
-        top-left
+        top-right
     }
 }
 

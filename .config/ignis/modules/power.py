@@ -4,7 +4,7 @@ import subprocess
 
 def power_button() -> Widget.Button:
     def on_click(_btn):
-        options = "⏻ Shutdown\n Reboot\n⏾ Suspend\n Lock"
+        options = "⏻  Shutdown\n󰜉  Reboot\n⏾  Suspend\n󰌾  Lock"
         try:
             result = subprocess.run(
                 ["fuzzel", "--dmenu", "--prompt=Power: ", "--lines=4"],

@@ -80,7 +80,13 @@ def _show_events(data: dict, date_str: str = ""):
 
     if error:
         _list_ref.child = [
-            Widget.Label(label=error, css_classes=["events-empty"], halign="start")
+            Widget.Label(
+                label=error,
+                css_classes=["events-empty"],
+                halign="start",
+                wrap=True,
+                max_width_chars=40,
+            )
         ]
     elif not events:
         _list_ref.child = [
