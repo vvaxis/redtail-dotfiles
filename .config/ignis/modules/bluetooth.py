@@ -71,7 +71,7 @@ def bluetooth() -> Widget.EventBox:
         subprocess.Popen(["fuzzel-bluetooth"])
 
     def on_right_click(_box):
-        subprocess.Popen(["blueman-manager"])
+        subprocess.Popen(["foot", "-e", "bluetuith"])
 
     box = Widget.EventBox(
         vertical=True,

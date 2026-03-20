@@ -144,7 +144,7 @@ environment {
     XCURSOR_THEME "phinger-cursors-dark"
     XCURSOR_SIZE "24"
     TERMINAL "foot"
-    BROWSER "zen-browser"
+    BROWSER "librewolf"
     FILE_MANAGER "nemo"
     EDITOR "micro"
 }
@@ -196,20 +196,9 @@ window-rule {
     default-column-width {}
 }
 
-// Firefox/LibreWolf PiP como flutuante
+// LibreWolf PiP como flutuante
 window-rule {
-    match app-id=r#"zen-browser$"# title="^Picture-in-Picture$"
-    open-floating true
-}
-
-window-rule {
-    match app-id=r#"zen-browser$"# title="^Picture-in-Picture$"
-    open-floating true
-}
-
-// Zen PiP
-window-rule {
-    match app-id=r#"zen-browser"# title="^Picture-in-Picture$"
+    match app-id=r#"librewolf$"# title="^Picture-in-Picture$"
     open-floating true
 }
 
@@ -228,7 +217,7 @@ binds {
     Mod+N       { spawn-sh "dunstctl history-pop"; }           // Recall última notificação
     Mod+Shift+N { spawn-sh "dunstctl close-all"; }             // Fechar todas notificações
     Mod+Escape  { spawn "swaylock"; }                          // Lock
-    Mod+B       { spawn "blueman-manager"; }                   // Bluetooth
+    Mod+B       { spawn-sh "$TERMINAL -e bluetuith"; }          // Bluetooth
     Mod+Shift+W { spawn-sh "killall ignis; ignis init &"; }    // Restart ignis
     Mod+S       { spawn-sh "$TERMINAL -e spotify_player"; }      // Spotify
     Mod+D       { spawn "ignis" "toggle-window" "ignis-dashboard"; } // Dashboard

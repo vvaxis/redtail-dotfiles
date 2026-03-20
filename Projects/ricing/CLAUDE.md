@@ -10,7 +10,7 @@ This is the ricing workspace for **redtail**, the Arch Linux + Niri desktop envi
 - **Hardware:** Lenovo IdeaPad 3 15ALC6
 - **CPU:** AMD Ryzen 5 5500U (6C/12T, up to 4.0 GHz)
 - **GPU:** AMD Radeon Lucienne (integrated)
-- **RAM:** 6 GB DDR4 (soldered, not upgradeable to 8) — zram 8 GB (zstd)
+- **RAM:** 6 GB DDR4 (soldered, not upgradeable to 8) — zram 10 GB (zstd) + 16 GB swapfile on NVMe
 - **Storage:** 256 GB NVMe (SSSTC CL1-4D256)
 - **Display:** 15.6" 1920x1080
 - **WiFi/BT:** RTL8822CU (wpa_supplicant backend)
@@ -50,13 +50,13 @@ João Vítor de Carvalho Almeida, 21, São Paulo. FGV EAESP undergraduate in Pub
 | Wallpaper | swaybg (static) |
 | File manager | Nemo (GUI), Yazi (TUI) |
 | Editor | Micro (TUI), occasionally code in other editors |
-| Browser | Zen Browser |
+| Browser | LibreWolf |
 | System monitor | btop |
 | PDF viewer | Zathura |
 | Image viewer | imv |
 | Video player | mpv |
 | Audio | PipeWire + WirePlumber |
-| Bluetooth | BlueZ + Blueman |
+| Bluetooth | BlueZ + bluetuith (TUI) |
 | Network | NetworkManager + networkmanager-dmenu |
 | Volume control | pwvucontrol |
 | Clipboard | cliphist + wl-clipboard |
@@ -70,7 +70,7 @@ João Vítor de Carvalho Almeida, 21, São Paulo. FGV EAESP undergraduate in Pub
 | Music | spotify-player (Rust TUI, Spotify Connect, MPRIS) |
 | Fetch | fastfetch |
 | Office | OnlyOffice |
-| Alt browser | LibreWolf |
+| Alt browser | Zen Browser (unused, kept installed) |
 | Printing | CUPS |
 | Bar | Ignis (vertical sidebar, replaces Waybar) |
 | Dashboard | Ignis (overlay — toggled via Mod+D) |
@@ -90,11 +90,28 @@ João Vítor de Carvalho Almeida, 21, São Paulo. FGV EAESP undergraduate in Pub
 ### Security
 
 - **Firewall:** ufw (deny incoming, allow outgoing)
-- **DNS:** DNS-over-TLS (opportunistic) via systemd-resolved, DNSSEC=allow-downgrade, primary Quad9 (`9.9.9.9`, `149.112.112.112`), fallback Cloudflare + Google (system defaults)
+- **DNS:** DNS-over-TLS (opportunistic) via systemd-resolved, DNSSEC=no (disabled — FGV college DNS returns unsigned responses, causing validation failures), primary Quad9 (`9.9.9.9`, `149.112.112.112`), fallback Cloudflare + Google (system defaults). LLMNR and mDNS disabled (closes port 5355, prevents local network name leaks on public WiFi).
+- **Network hardening:** MAC randomization for WiFi and ethernet (random per connection), NetworkManager connectivity check disabled (no periodic pings to `connectivity-check.ubuntu.com`), IPv6 privacy extensions enabled (`use_tempaddr=2` — temporary addresses preferred over stable SLAAC)
+- **Suspend stability:** amdgpu TTM VRAM eviction fails under memory pressure during S3 suspend (GFP_NOIO can't do I/O to free pages). Fix: disk swapfile keeps RAM from filling up pre-suspend; raised `min_free_kbytes` reserves 256 MB for kernel allocations. zram alone was insufficient because it compresses within RAM — doesn't free physical pages.
+- **Suspend pre-hook:** `/usr/lib/systemd/system-sleep/drop-caches.sh` drops file cache (`sync; echo 3 > drop_caches`) before suspend — frees ~600 MB while I/O is still allowed, giving amdgpu room for TTM eviction. Without this, min_free_kbytes alone was insufficient (kernel boost watermarks consumed the reserve).
+- **s2idle disabled:** `SuspendState=mem` in sleep.conf.d — s2idle hangs on this AMD hardware (GPU doesn't power down properly). Default config falls back to s2idle when S3 fails, causing hard freeze. Better to fail than hang.
+- **Hardening config files** (system-level, outside yadm scope):
+  - `/etc/systemd/resolved.conf.d/dns-over-tls.conf` — DoT + DNSSEC settings
+  - `/etc/systemd/resolved.conf.d/no-llmnr-mdns.conf` — LLMNR=no, MulticastDNS=no
+  - `/etc/NetworkManager/conf.d/wifi-rand-mac.conf` — MAC randomization
+  - `/etc/NetworkManager/conf.d/no-connectivity-check.conf` — connectivity check disabled
+  - `/etc/sysctl.d/40-ipv6-privacy.conf` — IPv6 privacy extensions
+  - `/etc/sysctl.d/50-min-free.conf` — `vm.min_free_kbytes=262144` (suspend stability)
+  - `/etc/fstab` — `/swapfile none swap defaults,pri=10 0 0` (16 GB disk swap, priority below zram)
+  - `/usr/lib/systemd/system-sleep/drop-caches.sh` — pre-suspend cache drop (suspend stability)
+  - `/etc/systemd/sleep.conf.d/no-s2idle.conf` — `SuspendState=mem` (prevent s2idle hang)
+  - `/etc/systemd/sleep.conf.d/hibernate.conf` — `HibernateDelaySec=30min` (auto-hibernate after 30 min suspend)
+  - `/etc/systemd/logind.conf.d/lid.conf` — `HandleLidSwitch=suspend-then-hibernate`
+  - `/etc/default/grub` — `resume=UUID=... resume_offset=7503872` (hibernation resume from swapfile)
 
 ### AUR Packages
 
-bibata-cursor-theme-bin, ignis-gvc, ignis-gvc-debug, librewolf-bin, libwireplumber-4.0-compat, networkmanager-dmenu-git, onlyoffice-bin, phinger-cursors, pwvucontrol, python-ignis-git, rofi-bluetooth-git, swaylock-effects, ttf-ms-fonts, yay, zen-browser-bin
+bibata-cursor-theme-bin, bluetuith-bin, ignis-gvc, ignis-gvc-debug, librewolf-bin, libwireplumber-4.0-compat, networkmanager-dmenu-git, onlyoffice-bin, phinger-cursors, pwvucontrol, python-ignis-git, rofi-bluetooth-git, swaylock-effects, ttf-ms-fonts, yay, zen-browser-bin
 
 ### System Services (enabled)
 
@@ -130,7 +147,7 @@ All configuration lives under `~/.config/` with standard XDG paths. Key director
 │   ├── modules/        # sidebar: power, calc, clock, volume, brightness, network, bluetooth, battery, system, workspaces
 │   ├── modules/dashboard/  # dashboard cards (calendar, events, weather, notes, music)
 │   └── scripts/        # weather.py, gcal-events.py, .venv/, requirements.txt
-├── mimeapps.list       # default apps (Zen=web, Zathura=PDF)
+├── mimeapps.list       # default apps (LibreWolf=web, Zathura=PDF)
 ├── networkmanager-dmenu/
 │   └── config.ini      # networkmanager-dmenu fuzzel integration
 ├── micro/
@@ -232,9 +249,9 @@ Palette is defined in `~/Projects/ricing/palette.conf` and propagated to all con
 
 **Niri window management:** 15px gaps, 8px corner radius, no borders (off), focus ring 3px in amber/overlay. Default column width 0.5 (half screen). Shadows are subtle: softness 20, spread 3, y-offset 5. Spread was reduced from 8 because it caused shadows to merge between adjacent windows ("dark haze" effect). Inactive windows at 90% opacity (compositor dim — subtle darkening without revealing wallpaper on opaque apps). Struts 15px left/right. Tab indicator on top (amber active, overlay inactive), place-within-column, hide-when-single-tab. Foot windows open tabbed by default. Hot corner top-right triggers overview. Overview zoom 0.6.
 
-**Key bindings philosophy:** Vim-style (hjkl) alongside arrow keys for all navigation. Mod+Z for terminal (not Mod+Return — Z is closer to the left hand). Mod+Tab for launcher. Mod+A for browser. Single-key launchers for frequently used TUI apps: Mod+G (btop), Mod+Y (yazi), Mod+S (spotify-player). Mod+E for file manager. Mod+B for Blueman. Mod+Escape for swaylock. Mod+O for overview. Mod+W toggles tabbed display. Mod+D for dashboard. Mod+N / Mod+Shift+N for dunst history-pop / close-all. Mod+Shift+C opens niri config in $EDITOR. Mod+Shift+W restarts Ignis. Media/brightness keys work while locked (playerctl for media, brightnessctl for backlight).
+**Key bindings philosophy:** Vim-style (hjkl) alongside arrow keys for all navigation. Mod+Z for terminal (not Mod+Return — Z is closer to the left hand). Mod+Tab for launcher. Mod+A for browser. Single-key launchers for frequently used TUI apps: Mod+G (btop), Mod+Y (yazi), Mod+S (spotify-player). Mod+E for file manager. Mod+B for bluetuith (Bluetooth TUI). Mod+Escape for swaylock. Mod+O for overview. Mod+W toggles tabbed display. Mod+D for dashboard. Mod+N / Mod+Shift+N for dunst history-pop / close-all. Mod+Shift+C opens niri config in $EDITOR. Mod+Shift+W restarts Ignis. Media/brightness keys work while locked (playerctl for media, brightnessctl for backlight).
 
-**Niri environment variables:** Daily-driver programs are referenced via shell variables in `spawn-sh` commands, defined in niri's `environment` block: `TERMINAL` (foot), `BROWSER` (zen-browser), `FILE_MANAGER` (nemo), `EDITOR` (micro), plus `XCURSOR_THEME` and `XCURSOR_SIZE` (duplicated from `.zprofile` for compositor awareness). Changing a single variable updates all keybindings that use it. Programs unlikely to be swapped (fuzzel, swaylock, blueman, ignis) use `spawn` directly.
+**Niri environment variables:** Daily-driver programs are referenced via shell variables in `spawn-sh` commands, defined in niri's `environment` block: `TERMINAL` (foot), `BROWSER` (librewolf), `FILE_MANAGER` (nemo), `EDITOR` (micro), plus `XCURSOR_THEME` and `XCURSOR_SIZE` (duplicated from `.zprofile` for compositor awareness). Changing a single variable updates all keybindings that use it. Programs unlikely to be swapped (fuzzel, swaylock, ignis) use `spawn` directly.
 
 ### Known Limitations and Unfinished Work
 
@@ -242,7 +259,7 @@ Palette is defined in `~/Projects/ricing/palette.conf` and propagated to all con
 - **Niri shadow spread > 5:** Causes shadows to merge between adjacent windows. Keep at 3.
 - **micro markdown rendering:** Inline code (backticks) uses the same green as headings — could differentiate. Cursor line highlight is barely visible.
 - **Niri window borders:** Tested with solid and gradient approaches — solid is redundant with focus ring, gradients look bad. Borders stay off.
-- **Zen Browser:** Not themed (browser CSS ricing is its own rabbit hole). Note: niri compositor opacity rules (applied to active windows) caused Zen to appear brown via wallpaper bleed-through — even though the window didn't look visually transparent. A rendering quirk. Those rules were reverted.
+- **LibreWolf:** Not themed (browser CSS ricing is its own rabbit hole). LibreWolf requires disabling some default privacy settings for usability (resistFingerprinting, WebGL, cookie clearing on shutdown). Replaced Zen Browser which had iframe embedding issues (Notion embeds blocked by Zen-specific protections).
 - **Libadwaita/GTK4 transparency:** GTK4/libadwaita apps set `wl_surface.set_opaque_region` on the entire window, blocking both compositor opacity AND CSS-level `rgba()` backgrounds (rgba renders wrong colors instead of transparency because it blends against an internal gray surface, not the wallpaper). No user-level workaround exists. CSS `rgba()` background transparency works on GTK3 apps (Nemo, Blueman) because they don't set opaque region on Wayland. Nemo is the primary GUI file manager; Nautilus remains installed only as a dependency of `xdg-desktop-portal-gnome` (required for screencasting).
 - **GTK theme:** Rewritten in v0.5 with full `@define-color` coverage (34+ variables in GTK4, 50+ in GTK3) and widget overrides for all interactive states (buttons, entries, scrollbar, switches, checks, progress, selection, hover, focus, tooltips, tabs, backdrop). Headerbar has a 3px amber bottom stripe. Button:checked uses subtle amber tint (not solid fill) to avoid painting toolbars solid yellow.
 - **CSS `spacing` error:** GTK4 CSS parser reports "No property named spacing" on ignis startup. The style.css has NO spacing property — error source is unknown (possibly GTK internals). Cosmetic, doesn't affect rendering.
@@ -297,7 +314,7 @@ Both sidebar and dashboard run in a single Ignis process, sharing one CSS file (
 - Volume module: right-click opens pwvucontrol
 - CPU/RAM modules: click opens btop in foot terminal (app-id=btop, window-rule 0.7 width)
 - Network/Bluetooth modules: show "on"/"off" labels below icons, colored per module accent (teal/blue when on, muted when off)
-- Bluetooth module: click opens fuzzel-bluetooth (rofi-bluetooth via fuzzel shim), right-click opens blueman-manager
+- Bluetooth module: click opens fuzzel-bluetooth (rofi-bluetooth via fuzzel shim), right-click opens bluetuith in foot
 - Calculator button: below workspaces, click opens fuzzel calculator (bc backend), result copied to clipboard + dunst notification
 
 **GTK4 renderer fix:** GTK4 4.20+ defaults to Vulkan on Wayland, which causes text clipping artifacts with Iosevka Nerd Font on AMD Radeon Lucienne (fractional pixel glyph positioning). Fix: Ignis is spawned with `GSK_RENDERER=cairo` in niri config. Additionally, `gtk-hint-font-metrics=true` is set in `~/.config/gtk-4.0/settings.ini`.
@@ -420,7 +437,7 @@ Blue       #639cce    Lavender   #b166c0    Teal       #4fafac
 Rewritten with full variable coverage and widget overrides. The "sea of brown" was solved by palette v0.5: near-black base for content areas, warm red-brown surface for chrome. Both GTK3 and GTK4 files now have 34+ `@define-color` variables (including all shade, scrollbar, destructive, headerbar variables that libadwaita reads) and interactive widget overrides (buttons, entries, scrollbar, switches, checks, progress, selection, hover, focus, tooltips, tabs, backdrop).
 
 Remaining notes:
-- Zen Browser (GTK3) proved resistant to `gtk-3.0/gtk.css` changes — may need separate approach.
+- LibreWolf may prove resistant to `gtk-3.0/gtk.css` changes — may need separate approach (same GTK3 issue Zen had).
 - libadwaita apps respect `@define-color` variables but not direct widget overrides — the variables alone cover most visual needs.
 
 ### GTK App Transparency — DONE (GTK3 only)
@@ -429,4 +446,4 @@ GTK3 apps (Nemo, Blueman) have CSS-level background transparency via `rgba(14, 9
 
 GTK4/libadwaita apps (Nautilus) cannot have transparency — they set opaque region AND CSS `rgba()` blends against an internal surface instead of the wallpaper, producing wrong colors. Nautilus remains installed as a dependency of `xdg-desktop-portal-gnome` (portal-gnome provides ScreenCast for screen sharing; replacing with portal-gtk + portal-wlr is possible but risky since portal-wlr is designed for wlroots, not Smithay/niri). Nemo is the daily-driver file manager.
 
-Inactive windows use compositor opacity at 0.90 (niri `match is-active=false`) — subtle dim without revealing wallpaper on opaque apps. Active-window compositor opacity was tested and **should not be re-added** — it caused text transparency on all apps and a rendering quirk on Zen Browser.
+Inactive windows use compositor opacity at 0.90 (niri `match is-active=false`) — subtle dim without revealing wallpaper on opaque apps. Active-window compositor opacity was tested and **should not be re-added** — it caused text transparency on all apps.
